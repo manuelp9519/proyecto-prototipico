@@ -1,0 +1,134 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  background-color: #f4f4f4;
+}
+
+header {
+  background-color: #B22222;
+  color: white;
+  padding: 20px;
+  text-align: center;
+}
+
+h2 {
+  color: #B22222;
+}
+
+.section {
+  padding: 20px;
+}
+
+.card {
+  background-color: white;
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+/* Estilos para filas de estadísticas */
+.stat-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 4px;
+  border-bottom: 1px dashed #eee;
+  font-size: 14px;
+}
+
+/* Inputs y botones */
+form input, form button, input[type="text"], button {
+  padding: 8px;
+  margin: 5px 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+button#loadExternal {
+  background-color: #B22222;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+  width: auto;
+}
+
+button:hover {
+  background-color: #8B0000;
+}
+
+/* Grillas y Layouts */
+.chart-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+}
+
+.chart-box {
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 10px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  width: 300px;
+}
+
+canvas {
+  width: 100%;
+  height: auto;
+}
+
+/* Contenedor del Contador */
+.counter-container {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.donut-wrapper {
+  width: 220px;
+  height: 220px;
+  position: relative;
+}
+
+#totalLabel {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  text-align: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: #B22222;
+}
+
+.info-wrapper {
+  flex: 1;
+  min-width: 200px;
+}
+
+/* Iframe */
+.iframe-container {
+  margin-top: 12px;
+}
+
+#externalFrame {
+  width: 100%;
+  height: 400px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+}
+
+/* Estadísticas Grid */
+.stats-grid {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.stat-col {
+  flex: 1;
+  min-width: 220px;
+}
