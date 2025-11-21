@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard: Incendios Forestales en Edomex</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+  <header>
+    <h1>Incendios Forestales en el Estado de México</h1>
+    <p>Visualización de datos actualizados (2021–2024)</p>
+  </header>
+
+  <div class="section">
+    <div class="card">
+      <h2>Visualizaciones</h2>
+      <div class="chart-grid">
+        <div class="chart-box"><canvas id="lineChart"></canvas></div>
+        <div class="chart-box"><canvas id="barChart"></canvas></div>
+        <div class="chart-box"><canvas id="pieChart"></canvas></div>
+        <div class="chart-box"><canvas id="areaChart"></canvas></div>
+        <div class="chart-box"><canvas id="groupedChart"></canvas></div>
+        <div class="chart-box"><canvas id="monthlyChart"></canvas></div>
+      </div>
+    </div>
+  
+    <div class="card">
+      <h2>Contador Total de Incendios (2021-2024)</h2>
+      <div class="counter-container">
+        <div class="donut-wrapper">
+          <canvas id="totalDonut" width="220" height="220"></canvas>
+          <div id="totalLabel">0</div>
+        </div>
+        <div class="info-wrapper">
+          <p id="totalInfo">Progreso del total acumulado de incendios. Se reinicia cuando alcanza el total y vuelve a comenzar.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Sistema de Predicción</h2>
+      <div style="display:none;">
+        <input id="externalUrl" type="text" placeholder="https://forestales.ujed.mx/incendios2/" />
+        <button id="loadExternal">Cargar</button>
+      </div>
+      <div class="iframe-container">
+        <iframe id="externalFrame" src="about:blank"></iframe>
+      </div>
+    </div>
+    
+    <div class="card" id="statsCard">
+      <h2>Estadísticas</h2>
+      <div class="stats-grid">
+        <div class="stat-col card">
+          <h3>Desglose por año</h3>
+          <div id="yearListCard">Cargando...</div>
+        </div>
+        <div class="stat-col card">
+          <h3>Estadísticas generales</h3>
+          <div id="generalStatsCard">Cargando...</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
