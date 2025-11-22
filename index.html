@@ -6,6 +6,7 @@
   <title>Dashboard: Incendios Forestales en Edomex</title>
   <link rel="stylesheet" href="styles.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
 
@@ -15,15 +16,70 @@
   </header>
 
   <div class="section">
+    
     <div class="card">
-      <h2>Visualizaciones</h2>
-      <div class="chart-grid">
-        <div class="chart-box"><canvas id="lineChart"></canvas></div>
-        <div class="chart-box"><canvas id="barChart"></canvas></div>
-        <div class="chart-box"><canvas id="pieChart"></canvas></div>
-        <div class="chart-box"><canvas id="areaChart"></canvas></div>
-        <div class="chart-box"><canvas id="groupedChart"></canvas></div>
-        <div class="chart-box"><canvas id="monthlyChart"></canvas></div>
+      <h2>Visualizaciones Interactivas</h2>
+      <p style="margin-bottom: 15px; color: #666;">Haz clic en los encabezados para desplegar cada gráfico.</p>
+      
+      <div class="accordion-container">
+        <button class="accordion-header active">
+          <span><i class="fa-solid fa-chart-line"></i> Tendencia Anual de Incendios</span>
+          <i class="fa-solid fa-chevron-down arrow"></i>
+        </button>
+        <div class="accordion-content" style="display: block;"> <div class="chart-wrapper">
+             <canvas id="lineChart"></canvas>
+          </div>
+        </div>
+
+        <button class="accordion-header">
+          <span><i class="fa-solid fa-chart-bar"></i> Superficie Afectada (Hectáreas)</span>
+          <i class="fa-solid fa-chevron-down arrow"></i>
+        </button>
+        <div class="accordion-content">
+          <div class="chart-wrapper">
+            <canvas id="barChart"></canvas>
+          </div>
+        </div>
+
+        <button class="accordion-header">
+          <span><i class="fa-solid fa-chart-pie"></i> Distribución Porcentual</span>
+          <i class="fa-solid fa-chevron-down arrow"></i>
+        </button>
+        <div class="accordion-content">
+           <div class="chart-wrapper chart-wrapper-pie">
+            <canvas id="pieChart"></canvas>
+          </div>
+        </div>
+
+        <button class="accordion-header">
+          <span><i class="fa-solid fa-chart-area"></i> Crecimiento Acumulado</span>
+          <i class="fa-solid fa-chevron-down arrow"></i>
+        </button>
+        <div class="accordion-content">
+           <div class="chart-wrapper">
+            <canvas id="areaChart"></canvas>
+          </div>
+        </div>
+
+        <button class="accordion-header">
+           <span><i class="fa-solid fa-layer-group"></i> Comparativa Agrupada (Incendios vs Superficie)</span>
+           <i class="fa-solid fa-chevron-down arrow"></i>
+        </button>
+        <div class="accordion-content">
+           <div class="chart-wrapper">
+            <canvas id="groupedChart"></canvas>
+          </div>
+        </div>
+
+        <button class="accordion-header">
+          <span><i class="fa-solid fa-calendar-days"></i> Comportamiento Mensual (2024)</span>
+          <i class="fa-solid fa-chevron-down arrow"></i>
+        </button>
+        <div class="accordion-content">
+           <div class="chart-wrapper">
+            <canvas id="monthlyChart"></canvas>
+          </div>
+        </div>
       </div>
     </div>
   
@@ -35,35 +91,43 @@
           <div id="totalLabel">0</div>
         </div>
         <div class="info-wrapper">
-          <p id="totalInfo">Progreso del total acumulado de incendios. Se reinicia cuando alcanza el total y vuelve a comenzar.</p>
+          <p id="totalInfo" style="font-size: 1.1em; line-height: 1.5;">
+            <i class="fa-solid fa-circle-info" style="color: #B22222;"></i> 
+            Progreso animado del total histórico acumulado. El contador se reinicia cíclicamente para visualizar la magnitud.
+          </p>
         </div>
       </div>
     </div>
 
-    <div class="card">
-      <h2>Sistema de Predicción</h2>
-      <div style="display:none;">
-        <input id="externalUrl" type="text" placeholder="https://forestales.ujed.mx/incendios2/" />
-        <button id="loadExternal">Cargar</button>
-      </div>
-      <div class="iframe-container">
-        <iframe id="externalFrame" src="about:blank"></iframe>
-      </div>
-    </div>
-    
     <div class="card" id="statsCard">
-      <h2>Estadísticas</h2>
+      <h2>Estadísticas Clave</h2>
       <div class="stats-grid">
-        <div class="stat-col card">
-          <h3>Desglose por año</h3>
-          <div id="yearListCard">Cargando...</div>
+        <div class="stat-col card stat-year-card">
+          <h3><i class="fa-regular fa-calendar-check"></i> Desglose por Año</h3>
+          <div class="year-header">
+            <span>Año</span>
+            <span>Incendios / Superficie</span>
+          </div>
+          <div id="yearListCard" class="styled-list">Cargando...</div>
         </div>
-        <div class="stat-col card">
-          <h3>Estadísticas generales</h3>
+        
+        <div class="stat-col card stat-general-card">
+          <h3><i class="fa-solid fa-calculator"></i> Métricas Generales</h3>
           <div id="generalStatsCard">Cargando...</div>
         </div>
       </div>
     </div>
+
+      <div class="card">
+        <h2>Sistema de Predicción Externo</h2>
+        <div style="display:none;">
+          <input id="externalUrl" type="text" placeholder="https://forestales.ujed.mx/incendios2/" />
+          <button id="loadExternal">Cargar</button>
+        </div>
+        <div class="iframe-container">
+          <iframe id="externalFrame" src="about:blank"></iframe>
+        </div>
+      </div>
   </div>
 
   <script src="script.js"></script>
