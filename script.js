@@ -177,3 +177,60 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
+
+// --- Vista externa (iframe) ---
+(function(){
+  const DEFAULT_EXTERNAL_URL = 'https://forestales.ujed.mx/incendios2/';
+  
+  const input = document.getElementById('externalUrl');
+  const btn = document.getElementById('loadExternal');
+  const frame = document.getElementById('externalFrame');
+  
+  // Función para validar si es una URL real
+  function isValidUrl(u){
+    try{ const url = new URL(u); return url.protocol === 'http:' || url.protocol === 'https:'; } catch(e){ return false; }
+  }
+
+  // Función para asegurar que empiece con https://
+  function normalize(val){
+    const pref = val.match(/^https?:\/\//i) ? '' : 'https://';
+    return pref + val;
+  }
+
+  // Función principal de carga
+  function loadUrl(raw){
+    const val = (raw||'').trim();
+    if(!val) return false;
+    const candidate = normalize(val);
+    if(!isValidUrl(candidate)) return false;
+    
+    // Asignar la URL al iframe
+    frame.src = candidate;
+    
+    // Guardar en memoria para la próxima vez
+    try{ localStorage.setItem('lastExternalUrl', candidate); } catch(e){}
+    input.value = candidate;
+    return true;
+  }
+
+  // Escuchar el click del botón
+  if(btn){
+      btn.addEventListener('click', ()=>{
+        const val = (input.value||'').trim();
+        if(!val){ alert('Introduce una URL.'); return; }
+        if(!loadUrl(val)) alert('URL inválida. Usa http(s)://');
+      });
+  }
+
+  // Autocarga inteligente al abrir la página
+  try{
+    // Recuperamos la última URL usada o usamos la de la NASA por defecto
+    const stored = localStorage.getItem('lastExternalUrl');
+    // Priorizamos la constante DEFAULT si lo guardado (stored) era la URL vieja que fallaba
+    const initial = (input && input.value && input.value.trim()) || DEFAULT_EXTERNAL_URL;
+    
+    if(initial){ loadUrl(initial); }
+  }catch(e){ 
+      console.log("Error accediendo a localStorage", e);
+  }
+})();
