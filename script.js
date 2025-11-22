@@ -173,7 +173,8 @@ function buildGeneralCard(){
   rows.forEach(r=>{ const div=document.createElement('div'); div.className='stat-row'; div.innerHTML=`<div>${r[0]}</div><div>${r[1]}</div>`; el.appendChild(div); });
 }
 
-// Hook para actualizar stats
+// Hook para actualizar stat
 (function(){ const orig = window.refreshCharts || function(){}; window.refreshCharts = function(){ orig(); buildYearCard(); buildGeneralCard(); }; })();
 
 buildYearCard(); buildGeneralCard();
+ 
