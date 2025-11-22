@@ -1,9 +1,9 @@
-// Datos Base
+// --- DATOS BASE ---
 const labels = ['2021','2022','2023','2024'];
 const incendios = [1453,1046,927,818];
 const superficie = [14168,9467,20000,1450];
 
-// Opciones para que las gráficas se adapten al contenedor del acordeón
+// Configuración común de gráficas
 const commonOptions = {
     responsive: true,
     maintainAspectRatio: false,
@@ -12,7 +12,7 @@ const commonOptions = {
 
 function ctx(id){ return document.getElementById(id).getContext('2d'); }
 
-// --- Inicialización de Gráficas ---
+// --- INICIALIZACIÓN DE GRÁFICAS (Chart.js) ---
 const lineChartInst = new Chart(ctx('lineChart'), { type:'line', data:{ labels: labels.slice(), datasets:[{ label:'Incendios Forestales', data:incendios.slice(), borderColor:'#B22222', backgroundColor:'rgba(178,34,34,0.2)', fill:true, tension:0.3 }] }, options: commonOptions });
 const barChartInst = new Chart(ctx('barChart'), { type:'bar', data:{ labels: labels.slice(), datasets:[{ label:'Superficie Afectada (ha)', data: superficie.slice(), backgroundColor:['#B22222','#CD5C5C','#FA8072','#F08080'] }] }, options: commonOptions });
 const pieChartInst = new Chart(ctx('pieChart'), { type:'pie', data:{ labels: labels.slice(), datasets:[{ label:'Porcentaje de Incendios', data:incendios.slice(), backgroundColor:['#B22222','#CD5C5C','#FA8072','#F08080'] }] }, options: commonOptions });
@@ -20,7 +20,7 @@ const areaChartInst = new Chart(ctx('areaChart'), { type:'line', data:{ labels: 
 const groupedChartInst = new Chart(ctx('groupedChart'), { type:'bar', data:{ labels: labels.slice(), datasets:[ { label:'Incendios', data:incendios.slice(), backgroundColor:'#B22222' }, { label:'Superficie (ha)', data:superficie.slice(), backgroundColor:'#FA8072' } ] }, options: commonOptions });
 const monthlyChartInst = new Chart(ctx('monthlyChart'), { type:'line', data:{ labels:['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio'], datasets:[{ label:'Incendios Mensuales 2024', data:[120,180,250,300,200,100,50], borderColor:'#B22222', backgroundColor:'rgba(178,34,34,0.2)', fill:true }] }, options: commonOptions });
 
-// --- Función para Refrescar Gráficas ---
+// --- FUNCIÓN DE REFRESCO (Para actualizaciones dinámicas) ---
 function refreshCharts(){
   lineChartInst.data.labels = labels.slice(); lineChartInst.data.datasets[0].data = incendios.slice(); lineChartInst.update();
   barChartInst.data.labels = labels.slice(); barChartInst.data.datasets[0].data = superficie.slice(); barChartInst.update();
@@ -28,12 +28,12 @@ function refreshCharts(){
   areaChartInst.data.labels = labels.slice(); areaChartInst.data.datasets[0].data = incendios.reduce((acc,val,i)=>{ acc.push((acc[i-1]||0)+val); return acc; },[]); areaChartInst.update();
   groupedChartInst.data.labels = labels.slice(); groupedChartInst.data.datasets[0].data = incendios.slice(); groupedChartInst.data.datasets[1].data = superficie.slice(); groupedChartInst.update();
   
-  // Actualizar estadísticas también
+  // Regenerar tarjetas de estadísticas
   buildYearCard(); 
   buildGeneralCard();
 }
 
-// --- Lógica del Contador Total (Animación por Scroll) ---
+// --- LÓGICA DEL CONTADOR ANIMADO (Donut + Label) ---
 const totalCtx = document.getElementById('totalDonut').getContext('2d');
 const totalLabel = document.getElementById('totalLabel');
 const donutCanvas = document.getElementById('totalDonut');
@@ -65,7 +65,7 @@ function animateCounterTo(target, durationMs) {
     totalLabel.textContent = value.toLocaleString();
     
     totalDonutInst.data.datasets[0].data = [value, Math.max(0, target - value)];
-    totalDonutInst.update('none');
+    totalDonutInst.update('none'); // Actualización ligera sin re-render total
 
     if (t < 1) {
       counterAnimationId = requestAnimationFrame(step);
@@ -74,33 +74,23 @@ function animateCounterTo(target, durationMs) {
   counterAnimationId = requestAnimationFrame(step);
 }
 
-// --- INTERSECTION OBSERVER ---
-const observerOptions = {
-    root: null,
-    threshold: 0.5 
-};
-
+// Intersection Observer para iniciar animación al hacer scroll
 const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            animateCounterTo(computeTotal(), 2500);
-        } else {
-            if (counterAnimationId) cancelAnimationFrame(counterAnimationId);
-        }
+        if (entry.isIntersecting) animateCounterTo(computeTotal(), 2500);
     });
-}, observerOptions);
+}, { threshold: 0.5 });
 
 if(donutCanvas) observer.observe(donutCanvas);
 
-
-// --- Funciones de Estadísticas ---
+// --- GENERACIÓN DE TARJETAS DE ESTADÍSTICAS (VERSIÓN MODERNA) ---
 function formatNumber(n){ return Number(n).toLocaleString(undefined, {maximumFractionDigits: 1}); }
 function median(arr){ const a = arr.slice().sort((x,y)=>x-y); const m = Math.floor(a.length/2); return a.length%2 ? a[m] : (a[m-1]+a[m])/2; }
 
 function buildYearCard(){
   const el = document.getElementById('yearListCard'); if(!el) return;
   el.innerHTML = '';
-  el.className = 'styled-list';
+  el.className = 'styled-list'; // Clase CSS moderna
 
   for(let i=0;i<labels.length;i++){
     const row = document.createElement('div'); row.className='year-row';
@@ -115,42 +105,41 @@ function buildYearCard(){
   }
 }
 
-// --- FUNCIÓN DE ESTADÍSTICAS CORREGIDA ---
 function buildGeneralCard(){
   const el = document.getElementById('generalStatsCard'); if(!el) return;
   
+  // Cálculos Estadísticos
   const totalInc = incendios.reduce((s,v)=>s+v,0);
   const totalSup = superficie.reduce((s,v)=>s+v,0);
   const avgInc = Math.round(totalInc / incendios.length);
-  const avgSup = Math.round(totalSup / superficie.length); // Calculado
-  const maxInc = Math.max(...incendios); const maxIncYear = labels[incendios.indexOf(maxInc)];
+  const avgSup = Math.round(totalSup / superficie.length);
+  const maxInc = Math.max(...incendios); 
+  const maxIncYear = labels[incendios.indexOf(maxInc)];
   const pctChange = ((incendios[incendios.length-1] - incendios[0]) / incendios[0]) * 100;
-  const medianInc = median(incendios); // Calculado
+  const medianInc = median(incendios);
 
+  // Generación de HTML Grid
   el.innerHTML = '<div class="metrics-grid"></div>';
   const grid = el.querySelector('.metrics-grid');
   const createMetric = (t, v, s, c = '') => `<div class="metric-box ${c}"><h4>${t}</h4><span class="metric-value">${v}</span><span class="metric-sub">${s}</span></div>`;
 
   let h = '';
-  // 1. Totales
   h += createMetric('Total Incendios', formatNumber(totalInc), '2021-2024', 'accent-red');
   h += createMetric('Total Superficie', formatNumber(totalSup), 'Hectáreas', 'accent-green');
-  
-  // 2. Promedios (Aquí agregamos el de superficie que faltaba)
   h += createMetric('Promedio Anual', formatNumber(avgInc), 'Incendios', 'accent-orange');
-  h += createMetric('Promedio Superficie', formatNumber(avgSup), 'Ha por año', 'accent-blue'); // <-- AGREGADO
-  
-  // 3. Otros datos estadísticos (Aquí agregamos la mediana que faltaba)
-  h += createMetric('Mediana Incendios', formatNumber(medianInc), 'Valor central', 'accent-orange'); // <-- AGREGADO
+  h += createMetric('Promedio Superficie', formatNumber(avgSup), 'Ha por año', 'accent-blue');
+  h += createMetric('Mediana Incendios', formatNumber(medianInc), 'Valor central', 'accent-orange');
   h += createMetric('Pico Máximo', formatNumber(maxInc), `Año ${maxIncYear}`, 'accent-red');
   h += createMetric('Tendencia', `${pctChange > 0 ? '+' : ''}${pctChange.toFixed(1)}%`, 'Cambio Total', pctChange > 0 ? 'accent-red' : 'accent-green');
   
   grid.innerHTML = h;
 }
 
-buildYearCard(); buildGeneralCard();
+// Ejecutar funciones iniciales
+buildYearCard(); 
+buildGeneralCard();
 
-// --- Lógica del Acordeón ---
+// --- COMPORTAMIENTO DEL ACORDEÓN ---
 document.addEventListener('DOMContentLoaded', function() {
     const headers = document.querySelectorAll('.accordion-header');
     headers.forEach(header => {
@@ -158,94 +147,33 @@ document.addEventListener('DOMContentLoaded', function() {
             this.classList.toggle('active');
             const content = this.nextElementSibling;
             content.style.display = this.classList.contains('active') ? 'block' : 'none';
+            
+            // Redimensionar gráfica si existe dentro
             const cvs = content.querySelector('canvas');
             if(cvs){ const chart = Chart.getChart(cvs); if(chart) chart.resize(); }
         });
     });
 });
 
-// --- Vista externa (iframe) ---
+// --- LÓGICA DEL IFRAME EXTERNO ---
 (function(){
-  const DEFAULT_EXTERNAL_URL = 'https://firms.modaps.eosdis.nasa.gov/map/';
+  const DEFAULT_EXTERNAL_URL = 'https://forestales.ujed.mx/incendios2/';
   const input = document.getElementById('externalUrl');
   const btn = document.getElementById('loadExternal');
   const frame = document.getElementById('externalFrame');
   
-  function isValidUrl(u){ try{ const url = new URL(u); return url.protocol === 'http:' || url.protocol === 'https:'; } catch(e){ return false; } }
-  function normalize(val){ return (val.match(/^https?:\/\//i) ? '' : 'https://') + val; }
-
   function loadUrl(raw){
     const val = (raw||'').trim();
-    if(!val) return false;
-    const candidate = normalize(val);
-    if(!isValidUrl(candidate)) return false;
-    frame.src = candidate;
-    try{ localStorage.setItem('lastExternalUrl', candidate); } catch(e){}
-    input.value = candidate;
-    return true;
+    if(!val) return;
+    frame.src = (val.match(/^https?:\/\//i) ? '' : 'https://') + val;
   }
 
   if(btn){
-      btn.addEventListener('click', ()=>{
-        const val = (input.value||'').trim();
-        if(!val){ alert('Introduce una URL.'); return; }
-        if(!loadUrl(val)) alert('URL inválida.');
-      });
+      btn.addEventListener('click', ()=>{ loadUrl(input.value); });
   }
-
+  // Cargar URL inicial si existe
   try{
-    const stored = localStorage.getItem('lastExternalUrl');
-    const initial = (input && input.value && input.value.trim()) || stored || DEFAULT_EXTERNAL_URL;
-    if(initial){ loadUrl(initial); }
+    const initial = (input && input.value) || DEFAULT_EXTERNAL_URL;
+    loadUrl(initial);
   }catch(e){ }
 })();
-
-// --- Funciones de Estadísticas ---
-function formatNumber(n){ return Number(n).toLocaleString(); }
-function median(arr){ const a = arr.slice().sort((x,y)=>x-y); const m = Math.floor(a.length/2); return a.length%2 ? a[m] : (a[m-1]+a[m])/2; }
-function stddev(arr){ const mean = arr.reduce((s,v)=>s+v,0)/arr.length; const variance = arr.reduce((s,v)=>s+Math.pow(v-mean,2),0)/arr.length; return Math.sqrt(variance); }
-
-function buildYearCard(){
-  const el = document.getElementById('yearListCard'); if(!el) return;
-  el.innerHTML = '';
-  for(let i=0;i<labels.length;i++){
-    const row = document.createElement('div'); row.className='stat-row';
-    row.innerHTML = `<div>${labels[i]}</div><div>${formatNumber(incendios[i])} / ${formatNumber(superficie[i])} ha</div>`;
-    el.appendChild(row);
-  }
-}
-
-function buildGeneralCard(){
-  const el = document.getElementById('generalStatsCard'); if(!el) return;
-  const totalInc = incendios.reduce((s,v)=>s+v,0);
-  const totalSup = superficie.reduce((s,v)=>s+v,0);
-  const avgInc = Math.round(totalInc / incendios.length);
-  const maxInc = Math.max(...incendios); const maxIncYear = labels[incendios.indexOf(maxInc)];
-  const maxSup = Math.max(...superficie); const maxSupYear = labels[superficie.indexOf(maxSup)];
-  const pctChange = ((incendios[incendios.length-1] - incendios[0]) / incendios[0]) * 100;
-  const medianInc = median(incendios);
-  const medianSup = median(superficie);
-  const stdInc = stddev(incendios);
-  const stdSup = stddev(superficie);
-  
-  el.innerHTML = '';
-  const rows = [
-    ['Incendios totales', formatNumber(totalInc)],
-    ['Superficie total (ha)', formatNumber(totalSup)],
-    ['Promedio inc/año', formatNumber(avgInc)],
-    ['Mediana incendios', formatNumber(medianInc)],
-    ['Desv. std incendios', formatNumber(stdInc.toFixed(1))],
-    ['Mayor incendios', `${maxIncYear} (${formatNumber(maxInc)})`],
-    ['Mayor superficie', `${maxSupYear} (${formatNumber(maxSup)} ha)`],
-    ['Mediana superficie (ha)', formatNumber(medianSup)],
-    ['Desv. std superficie', formatNumber(stdSup.toFixed(1))],
-    ['Cambio 2021→2024', `${pctChange.toFixed(1)}%`]
-  ];
-  rows.forEach(r=>{ const div=document.createElement('div'); div.className='stat-row'; div.innerHTML=`<div>${r[0]}</div><div>${r[1]}</div>`; el.appendChild(div); });
-}
-
-// Hook para actualizar stat
-(function(){ const orig = window.refreshCharts || function(){}; window.refreshCharts = function(){ orig(); buildYearCard(); buildGeneralCard(); }; })();
-
-buildYearCard(); buildGeneralCard();
- 

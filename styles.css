@@ -1,23 +1,82 @@
 body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Tipografía más moderna */
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   margin: 0;
-  background-color: #eaeff2; /* Fondo ligeramente más azulado */
+  background-color: #eaeff2;
   color: #333;
+  min-height: 100vh;
 }
 
-header {
-  background: linear-gradient(135deg, #B22222, #8B0000); /* Degradado elegante */
-  color: white;
-  padding: 25px 20px;
-  text-align: center;
+/* --- HEADER ANIMADO (Consolidado) --- */
+header.animated-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px 20px;
+  gap: 12px;
+  background: linear-gradient(135deg, #B22222, #8B0000);
   box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+  animation: headerFloat 6s ease-in-out infinite;
+  color: white;
+  border-radius: 0 0 8px 8px;
 }
 
-h1 { margin: 0; font-size: 1.8rem; }
+.header-side {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: sideSlide 900ms ease both;
+}
+
+.header-logo {
+  width: 90px;
+  height: auto;
+  max-height: 110px;
+  object-fit: contain;
+  transition: transform 300ms ease;
+  animation: logoPulse 2.5s ease-in-out infinite;
+}
+.header-logo:hover { transform: scale(1.05); }
+
+.header-center {
+  flex: 1 1 auto;
+  text-align: center;
+  padding: 0 12px;
+  animation: titleFadeIn 1000ms ease both;
+}
+
+.header-title { margin: 0; font-size: 1.6rem; text-shadow: 0 2px 6px rgba(0,0,0,0.3); }
+.header-sub { margin: 0; font-size: 0.95rem; color: rgba(255,255,255,0.9); }
+
+/* Animaciones Keyframes */
+@keyframes headerFloat {
+  0% { box-shadow: 0 2px 6px rgba(178,34,34,0.2); }
+  50% { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(178,34,34,0.3); }
+  100% { box-shadow: 0 2px 6px rgba(178,34,34,0.2); }
+}
+@keyframes logoPulse {
+  0%, 100% { transform: scale(1); opacity: 0.98; }
+  50% { transform: scale(1.02); opacity: 1; }
+}
+@keyframes titleFadeIn {
+  0% { opacity: 0; transform: translateY(-8px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+@keyframes sideSlide {
+  0% { opacity: 0; transform: translateX(-10px); }
+  100% { opacity: 1; transform: translateX(0); }
+}
+
+/* Responsive Header */
+@media (max-width: 600px) {
+  header.animated-header { flex-direction: column; gap: 10px; text-align: center; }
+  .header-logo { width: 70px; }
+}
+
+/* --- LAYOUT GENERAL --- */
+.section { padding: 20px; max-width: 1200px; margin: 0 auto; }
 h2 { color: #B22222; border-bottom: 2px solid #eee; padding-bottom: 10px; margin-top: 0; }
 h3 { color: #555; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
-
-.section { padding: 20px; max-width: 1200px; margin: 0 auto; }
 
 .card {
   background-color: white;
@@ -28,12 +87,8 @@ h3 { color: #555; margin-bottom: 15px; display: flex; align-items: center; gap: 
   border: 1px solid rgba(0,0,0,0.05);
 }
 
-/* --- NUEVO: Estilos del Acordeón de Gráficos --- */
-.accordion-container {
-    border: 1px solid #eee;
-    border-radius: 8px;
-    overflow: hidden;
-}
+/* --- ACORDEÓN --- */
+.accordion-container { border: 1px solid #eee; border-radius: 8px; overflow: hidden; }
 
 .accordion-header {
     background-color: #f9f9f9;
@@ -43,7 +98,6 @@ h3 { color: #555; margin-bottom: 15px; display: flex; align-items: center; gap: 
     width: 100%;
     border: none;
     text-align: left;
-    outline: none;
     font-size: 16px;
     font-weight: 600;
     transition: all 0.3s ease;
@@ -52,56 +106,36 @@ h3 { color: #555; margin-bottom: 15px; display: flex; align-items: center; gap: 
     justify-content: space-between;
     align-items: center;
 }
-
 .accordion-header span { display: flex; align-items: center; gap: 10px; }
 .accordion-header i { color: #B22222; }
-
-/* Estado activo del header */
-.accordion-header.active, .accordion-header:hover {
-    background-color: #fff0f0;
-    color: #B22222;
-}
-
-/* Flecha animada */
+.accordion-header.active, .accordion-header:hover { background-color: #fff0f0; color: #B22222; }
 .accordion-header .arrow { transition: transform 0.3s ease; font-size: 0.8em;}
 .accordion-header.active .arrow { transform: rotate(180deg); }
 
-/* Contenido del acordeón */
 .accordion-content {
     padding: 0 20px;
     background-color: white;
-    display: none; /* Oculto por defecto */
+    display: none;
     overflow: hidden;
     border-bottom: 1px solid #eee;
 }
-
-/* Contenedor para asegurar que el canvas tenga altura al abrirse */
-.chart-wrapper {
-    padding: 20px 0;
-    height: 350px; /* Altura fija para consistencia */
-    position: relative;
-}
-.chart-wrapper-pie { height: 400px; } /* El pastel necesita más espacio vertical */
+.chart-wrapper { padding: 20px 0; height: 350px; position: relative; }
+.chart-wrapper-pie { height: 400px; }
 .chart-wrapper canvas { width: 100% !important; height: 100% !important; }
 
-
-/* --- NUEVO: Estilos de Estadísticas Mejorados --- */
+/* --- ESTADÍSTICAS (Modernas) --- */
 .stats-grid { display: flex; gap: 20px; flex-wrap: wrap; }
 .stat-col { flex: 1; min-width: 300px; }
 
-/* Estilos para "Desglose por Año" (Lista) */
+/* Lista por Año */
 .stat-year-card { background-color: #fff; }
 .year-header {
     display: flex; justify-content: space-between; padding: 10px;
     font-weight: bold; color: #777; font-size: 0.9em; text-transform: uppercase;
 }
 .styled-list .year-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 12px 10px;
-    border-bottom: 1px solid #f0f0f0;
-    transition: background 0.2s;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 12px 10px; border-bottom: 1px solid #f0f0f0;
 }
 .styled-list .year-row:hover { background-color: #fcfcfc; }
 .styled-list .year-badge {
@@ -113,43 +147,32 @@ h3 { color: #555; margin-bottom: 15px; display: flex; align-items: center; gap: 
 .styled-list i.fa-fire { color: #ff6b6b; }
 .styled-list i.fa-tree { color: #4ecdc4; }
 
-/* Estilos para "Estadísticas Generales" (Métricas) */
+/* Tarjetas de Métricas */
 .stat-general-card { background-color: #fdfdfd; }
 .metrics-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-    gap: 15px;
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 15px;
 }
 .metric-box {
-    background: white;
-    padding: 15px;
-    border-radius: 12px;
-    text-align: center;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.03);
-    border: 1px solid #eee;
-    transition: transform 0.2s;
+    background: white; padding: 15px; border-radius: 12px; text-align: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.03); border: 1px solid #eee; transition: transform 0.2s;
 }
 .metric-box:hover { transform: translateY(-3px); box-shadow: 0 4px 10px rgba(0,0,0,0.08); }
 .metric-box h4 { margin: 0 0 10px 0; font-size: 0.85rem; color: #888; font-weight: 600; text-transform: uppercase;}
 .metric-value { display: block; font-size: 1.6rem; font-weight: 800; color: #333; margin-bottom: 5px;}
 .metric-sub { font-size: 0.8rem; color: #999; }
 
-/* Colores de acento para las métricas */
+/* Colores de métricas */
 .accent-red .metric-value { color: #B22222; }
 .accent-orange .metric-value { color: #e67e22; }
 .accent-blue .metric-value { color: #3498db; }
 .accent-green .metric-value { color: #27ae60; }
 
-
-/* --- Estilos del Contador y Otros (Mantenidos y ajustados) --- */
+/* --- CONTADOR y EXTRAS --- */
 .counter-container { display: flex; align-items: center; gap: 30px; flex-wrap: wrap; justify-content: center; padding: 20px 0;}
 .donut-wrapper { width: 220px; height: 220px; position: relative; }
-#totalLabel { position: absolute; left: 0; right: 0; top: 50%; transform: translateY(-50%); text-align: center; font-size: 3rem; font-weight: 800; color: #B22222; text-shadow: 1px 1px 2px rgba(0,0,0,0.1);}
+#totalLabel { position: absolute; left: 0; right: 0; top: 50%; transform: translateY(-50%); text-align: center; font-size: 3rem; font-weight: 800; color: #B22222; }
 .info-wrapper { flex: 1; min-width: 250px; border-left: 3px solid #eee; padding-left: 20px; }
 .iframe-container { margin-top: 12px; }
 #externalFrame { width: 100%; height: 450px; border: none; border-radius: 6px; background: #f4f4f4;}
-
-/* Inputs y botones (Mantenidos) */
-form input, form button, input[type="text"], button#loadExternal { padding: 10px; margin: 5px 0; border-radius: 4px; border: 1px solid #ddd;}
-button#loadExternal { background-color: #B22222; color: white; border: none; cursor: pointer; padding: 10px 20px; font-weight: bold;}
-button#loadExternal:hover { background-color: #8B0000; }
+input[type="text"], button#loadExternal { padding: 10px; margin: 5px 0; border-radius: 4px; border: 1px solid #ddd; width: 100%; box-sizing: border-box;}
+button#loadExternal { background-color: #B22222; color: white; border: none; cursor: pointer; width: auto;}
