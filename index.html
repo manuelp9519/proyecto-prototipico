@@ -6,118 +6,7 @@
   <title>Dashboard: Incendios Forestales en Edomex</title>
   <link rel="stylesheet" href="styles.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-  <!-- Estilos añadidos para colocar y redimensionar logos alrededor del título -->
-  <style>
-    header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 12px 20px;
-      gap: 12px;
-      background: linear-gradient(90deg, #b22222 0%, #b22222 100%);
-      border-radius: 8px;
-      /* animación general del header */
-      animation: headerFloat 6s ease-in-out infinite;
-    }
-    .header-side {
-      flex: 0 0 auto;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      /* ligera entrada desde los lados */
-      animation: sideSlide 900ms ease both;
-    }
-    .header-logo {
-      width: 90px; /* tamaño medio */
-      height: auto;
-      max-height: 110px;
-      object-fit: contain;
-      transition: transform 300ms ease;
-      /* pulso sutil */
-      animation: logoPulse 2.5s ease-in-out infinite;
-    }
-    .header-center {
-      flex: 1 1 auto;
-      text-align: center;
-      padding: 0 12px;
-      /* entrada del título */
-      animation: titleFadeIn 1000ms ease both;
-    }
-    /* Texto en blanco y con sombra para mejor legibilidad */
-    .header-title { margin: 0; font-size: 1.6rem; color: #ffffff; text-shadow: 0 2px 6px #b22222(0,0,0,0.55); }
-    .header-sub { margin: 0; font-size: 0.95rem; color: rgba(255,255,255,0.9); text-shadow: 0 1px 3px #b22222(0,0,0,0.45); }
-
-    /* Hover ligero sobre logos */
-    .header-logo:hover { transform: scale(1.05); }
-
-    /* Keyframes */
-    @keyframes headerFloat {
-      0% { transform: translateY(0px); box-shadow: 0 2px 6px #b22222(0,0,0,0.03); }
-      50% { transform: translateY(-6px); box-shadow: 0 10px 20px #b22222(0,0,0,0.05); }
-      100% { transform: translateY(0px); box-shadow: 0 2px 6px #b22222(0,0,0,0.03); }
-    }
-    @keyframes logoPulse {
-      0% { transform: scale(1); opacity: 0.98; }
-      50% { transform: scale(1.02); opacity: 1; }
-      100% { transform: scale(1); opacity: 0.98; }
-    }
-    @keyframes titleFadeIn {
-      0% { opacity: 0; transform: translateY(-8px) scale(0.995); }
-      100% { opacity: 1; transform: translateY(0) scale(1); }
-    }
-    @keyframes sideSlide {
-      0% { opacity: 0; transform: translateX(-10px) scale(0.98); }
-      100% { opacity: 1; transform: translateX(0) scale(1); }
-    }
-
-    /* Fondo general del dashboard: gris claro para resaltar las gráficas */
-    html, body {
-      height: 100%;
-    }
-    body {
-      min-height: 100vh;
-      margin: 0;
-      background-color: #f3f4f6; /* tono gris claro (fondo del dashboard) */
-      background-repeat: no-repeat;
-      background-attachment: fixed;
-      background-size: cover;
-      color: #111;
-      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-    }
-
-    /* Forzar que la zona principal muestre el fondo incluso con poco contenido */
-    .section {
-      background: transparent;
-      padding: 20px;
-      min-height: calc(100vh - 140px); /* deja espacio para el header; ajusta si tu header cambia */
-    }
-
-    /* Asegurar que las tarjetas (donde están las gráficas) contrasten */
-    .card {
-      background: #ffffff;
-      border-radius: 10px;
-      box-shadow: 0 6px 18px rgba(16,24,40,0.06);
-      padding: 16px;
-    }
-
-    /* Responsive: apilar en pantallas pequeñas y reducir logos */
-    @media (max-width: 600px) {
-      header { flex-direction: column; gap: 8px; text-align: center; padding: 10px; }
-      .header-logo { width: 70px; max-height: 80px; }
-      .header-title { font-size: 1.25rem; }
-      /* reducir animaciones en pantallas pequeñas */
-      header { animation-duration: 8s; }
-    }
-
-    /* Respetar preferencia del usuario para reducir animaciones */
-    @media (prefers-reduced-motion: reduce) {
-      header, .header-side, .header-logo, .header-center {
-        animation: none !important;
-        transition: none !important;
-      }
-    }
-  </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
 
@@ -137,15 +26,70 @@
   </header>
 
   <div class="section">
+    
     <div class="card">
-      <h2>Visualizaciones</h2>
-      <div class="chart-grid">
-        <div class="chart-box"><canvas id="lineChart"></canvas></div>
-        <div class="chart-box"><canvas id="barChart"></canvas></div>
-        <div class="chart-box"><canvas id="pieChart"></canvas></div>
-        <div class="chart-box"><canvas id="areaChart"></canvas></div>
-        <div class="chart-box"><canvas id="groupedChart"></canvas></div>
-        <div class="chart-box"><canvas id="monthlyChart"></canvas></div>
+      <h2>Visualizaciones Interactivas</h2>
+      <p style="margin-bottom: 15px; color: #666;">Haz clic en los encabezados para desplegar cada gráfico.</p>
+      
+      <div class="accordion-container">
+        <button class="accordion-header active">
+          <span><i class="fa-solid fa-chart-line"></i> Tendencia Anual de Incendios</span>
+          <i class="fa-solid fa-chevron-down arrow"></i>
+        </button>
+        <div class="accordion-content" style="display: block;"> <div class="chart-wrapper">
+             <canvas id="lineChart"></canvas>
+          </div>
+        </div>
+
+        <button class="accordion-header">
+          <span><i class="fa-solid fa-chart-bar"></i> Superficie Afectada (Hectáreas)</span>
+          <i class="fa-solid fa-chevron-down arrow"></i>
+        </button>
+        <div class="accordion-content">
+          <div class="chart-wrapper">
+            <canvas id="barChart"></canvas>
+          </div>
+        </div>
+
+        <button class="accordion-header">
+          <span><i class="fa-solid fa-chart-pie"></i> Distribución Porcentual</span>
+          <i class="fa-solid fa-chevron-down arrow"></i>
+        </button>
+        <div class="accordion-content">
+           <div class="chart-wrapper chart-wrapper-pie">
+            <canvas id="pieChart"></canvas>
+          </div>
+        </div>
+
+        <button class="accordion-header">
+          <span><i class="fa-solid fa-chart-area"></i> Crecimiento Acumulado</span>
+          <i class="fa-solid fa-chevron-down arrow"></i>
+        </button>
+        <div class="accordion-content">
+           <div class="chart-wrapper">
+            <canvas id="areaChart"></canvas>
+          </div>
+        </div>
+
+        <button class="accordion-header">
+           <span><i class="fa-solid fa-layer-group"></i> Comparativa Agrupada (Incendios vs Superficie)</span>
+           <i class="fa-solid fa-chevron-down arrow"></i>
+        </button>
+        <div class="accordion-content">
+           <div class="chart-wrapper">
+            <canvas id="groupedChart"></canvas>
+          </div>
+        </div>
+
+        <button class="accordion-header">
+          <span><i class="fa-solid fa-calendar-days"></i> Comportamiento Mensual (2024)</span>
+          <i class="fa-solid fa-chevron-down arrow"></i>
+        </button>
+        <div class="accordion-content">
+           <div class="chart-wrapper">
+            <canvas id="monthlyChart"></canvas>
+          </div>
+        </div>
       </div>
     </div>
   
@@ -157,37 +101,45 @@
           <div id="totalLabel">0</div>
         </div>
         <div class="info-wrapper">
-          <p id="totalInfo">Progreso del total acumulado de incendios. Se reinicia cuando alcanza el total y vuelve a comenzar.</p>
+          <p id="totalInfo" style="font-size: 1.1em; line-height: 1.5;">
+            <i class="fa-solid fa-circle-info" style="color: #B22222;"></i> 
+            Progreso animado del total histórico acumulado. El contador se reinicia cíclicamente para visualizar la magnitud.
+          </p>
         </div>
       </div>
     </div>
 
-    <div class="card">
-      <h2>Sistema de Predicción</h2>
-      <div style="display:none;">
-        <input id="externalUrl" type="text" placeholder="https://forestales.ujed.mx/incendios2/" />
-        <button id="loadExternal">Cargar</button>
-      </div>
-      <div class="iframe-container">
-        <iframe id="externalFrame" src="about:blank"></iframe>
-      </div>
-    </div>
-    
     <div class="card" id="statsCard">
-      <h2>Estadísticas</h2>
+      <h2>Estadísticas Clave</h2>
       <div class="stats-grid">
-        <div class="stat-col card">
-          <h3>Desglose por año</h3>
-          <div id="yearListCard">Cargando...</div>
+        <div class="stat-col card stat-year-card">
+          <h3><i class="fa-regular fa-calendar-check"></i> Desglose por Año</h3>
+          <div class="year-header">
+            <span>Año</span>
+            <span>Incendios / Superficie</span>
+          </div>
+          <div id="yearListCard" class="styled-list">Cargando...</div>
         </div>
-        <div class="stat-col card">
-          <h3>Estadísticas generales</h3>
+        
+        <div class="stat-col card stat-general-card">
+          <h3><i class="fa-solid fa-calculator"></i> Métricas Generales</h3>
           <div id="generalStatsCard">Cargando...</div>
         </div>
       </div>
     </div>
+
+      <div class="card">
+        <h2>Sistema de Predicción Externo</h2>
+        <div style="display: none;">
+          <input id="externalUrl" type="text" placeholder="https://forestales.ujed.mx/incendios2/" />
+          <button id="loadExternal">Cargar</button>
+        </div>
+        <div class="iframe-container">
+          <iframe id="externalFrame" src="about:blank"></iframe>
+        </div>
+      </div>
   </div>
 
   <script src="script.js"></script>
-
+</body>
 </html>
