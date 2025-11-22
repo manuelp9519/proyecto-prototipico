@@ -199,3 +199,53 @@ document.addEventListener('DOMContentLoaded', function() {
     if(initial){ loadUrl(initial); }
   }catch(e){ }
 })();
+
+// --- Funciones de Estadísticas ---
+function formatNumber(n){ return Number(n).toLocaleString(); }
+function median(arr){ const a = arr.slice().sort((x,y)=>x-y); const m = Math.floor(a.length/2); return a.length%2 ? a[m] : (a[m-1]+a[m])/2; }
+function stddev(arr){ const mean = arr.reduce((s,v)=>s+v,0)/arr.length; const variance = arr.reduce((s,v)=>s+Math.pow(v-mean,2),0)/arr.length; return Math.sqrt(variance); }
+
+function buildYearCard(){
+  const el = document.getElementById('yearListCard'); if(!el) return;
+  el.innerHTML = '';
+  for(let i=0;i<labels.length;i++){
+    const row = document.createElement('div'); row.className='stat-row';
+    row.innerHTML = `<div>${labels[i]}</div><div>${formatNumber(incendios[i])} / ${formatNumber(superficie[i])} ha</div>`;
+    el.appendChild(row);
+  }
+}
+
+function buildGeneralCard(){
+  const el = document.getElementById('generalStatsCard'); if(!el) return;
+  const totalInc = incendios.reduce((s,v)=>s+v,0);
+  const totalSup = superficie.reduce((s,v)=>s+v,0);
+  const avgInc = Math.round(totalInc / incendios.length);
+  const maxInc = Math.max(...incendios); const maxIncYear = labels[incendios.indexOf(maxInc)];
+  const maxSup = Math.max(...superficie); const maxSupYear = labels[superficie.indexOf(maxSup)];
+  const pctChange = ((incendios[incendios.length-1] - incendios[0]) / incendios[0]) * 100;
+  const medianInc = median(incendios);
+  const medianSup = median(superficie);
+  const stdInc = stddev(incendios);
+  const stdSup = stddev(superficie);
+  
+  el.innerHTML = '';
+  const rows = [
+    ['Incendios totales', formatNumber(totalInc)],
+    ['Superficie total (ha)', formatNumber(totalSup)],
+    ['Promedio inc/año', formatNumber(avgInc)],
+    ['Mediana incendios', formatNumber(medianInc)],
+    ['Desv. std incendios', formatNumber(stdInc.toFixed(1))],
+    ['Mayor incendios', `${maxIncYear} (${formatNumber(maxInc)})`],
+    ['Mayor superficie', `${maxSupYear} (${formatNumber(maxSup)} ha)`],
+    ['Mediana superficie (ha)', formatNumber(medianSup)],
+    ['Desv. std superficie', formatNumber(stdSup.toFixed(1))],
+    ['Cambio 2021→2024', `${pctChange.toFixed(1)}%`]
+  ];
+  rows.forEach(r=>{ const div=document.createElement('div'); div.className='stat-row'; div.innerHTML=`<div>${r[0]}</div><div>${r[1]}</div>`; el.appendChild(div); });
+}
+
+// Hook para actualizar stat
+(function(){ const orig = window.refreshCharts || function(){}; window.refreshCharts = function(){ orig(); buildYearCard(); buildGeneralCard(); }; })();
+
+buildYearCard(); buildGeneralCard();
+ 
