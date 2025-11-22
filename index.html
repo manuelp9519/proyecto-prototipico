@@ -6,12 +6,134 @@
   <title>Dashboard: Incendios Forestales en Edomex</title>
   <link rel="stylesheet" href="styles.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- Estilos añadidos para colocar y redimensionar logos alrededor del título -->
+  <style>
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 20px;
+      gap: 12px;
+      background: linear-gradient(90deg, #b22222 0%, #b22222 100%);
+      border-radius: 8px;
+      /* animación general del header */
+      animation: headerFloat 6s ease-in-out infinite;
+    }
+    .header-side {
+      flex: 0 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      /* ligera entrada desde los lados */
+      animation: sideSlide 900ms ease both;
+    }
+    .header-logo {
+      width: 90px; /* tamaño medio */
+      height: auto;
+      max-height: 110px;
+      object-fit: contain;
+      transition: transform 300ms ease;
+      /* pulso sutil */
+      animation: logoPulse 2.5s ease-in-out infinite;
+    }
+    .header-center {
+      flex: 1 1 auto;
+      text-align: center;
+      padding: 0 12px;
+      /* entrada del título */
+      animation: titleFadeIn 1000ms ease both;
+    }
+    /* Texto en blanco y con sombra para mejor legibilidad */
+    .header-title { margin: 0; font-size: 1.6rem; color: #ffffff; text-shadow: 0 2px 6px #b22222(0,0,0,0.55); }
+    .header-sub { margin: 0; font-size: 0.95rem; color: rgba(255,255,255,0.9); text-shadow: 0 1px 3px #b22222(0,0,0,0.45); }
+
+    /* Hover ligero sobre logos */
+    .header-logo:hover { transform: scale(1.05); }
+
+    /* Keyframes */
+    @keyframes headerFloat {
+      0% { transform: translateY(0px); box-shadow: 0 2px 6px #b22222(0,0,0,0.03); }
+      50% { transform: translateY(-6px); box-shadow: 0 10px 20px #b22222(0,0,0,0.05); }
+      100% { transform: translateY(0px); box-shadow: 0 2px 6px #b22222(0,0,0,0.03); }
+    }
+    @keyframes logoPulse {
+      0% { transform: scale(1); opacity: 0.98; }
+      50% { transform: scale(1.02); opacity: 1; }
+      100% { transform: scale(1); opacity: 0.98; }
+    }
+    @keyframes titleFadeIn {
+      0% { opacity: 0; transform: translateY(-8px) scale(0.995); }
+      100% { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    @keyframes sideSlide {
+      0% { opacity: 0; transform: translateX(-10px) scale(0.98); }
+      100% { opacity: 1; transform: translateX(0) scale(1); }
+    }
+
+    /* Fondo general del dashboard: gris claro para resaltar las gráficas */
+    html, body {
+      height: 100%;
+    }
+    body {
+      min-height: 100vh;
+      margin: 0;
+      background-color: #f3f4f6; /* tono gris claro (fondo del dashboard) */
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      background-size: cover;
+      color: #111;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    }
+
+    /* Forzar que la zona principal muestre el fondo incluso con poco contenido */
+    .section {
+      background: transparent;
+      padding: 20px;
+      min-height: calc(100vh - 140px); /* deja espacio para el header; ajusta si tu header cambia */
+    }
+
+    /* Asegurar que las tarjetas (donde están las gráficas) contrasten */
+    .card {
+      background: #ffffff;
+      border-radius: 10px;
+      box-shadow: 0 6px 18px rgba(16,24,40,0.06);
+      padding: 16px;
+    }
+
+    /* Responsive: apilar en pantallas pequeñas y reducir logos */
+    @media (max-width: 600px) {
+      header { flex-direction: column; gap: 8px; text-align: center; padding: 10px; }
+      .header-logo { width: 70px; max-height: 80px; }
+      .header-title { font-size: 1.25rem; }
+      /* reducir animaciones en pantallas pequeñas */
+      header { animation-duration: 8s; }
+    }
+
+    /* Respetar preferencia del usuario para reducir animaciones */
+    @media (prefers-reduced-motion: reduce) {
+      header, .header-side, .header-logo, .header-center {
+        animation: none !important;
+        transition: none !important;
+      }
+    }
+  </style>
 </head>
 <body>
 
-  <header>
-    <h1>Incendios Forestales en el Estado de México</h1>
-    <p>Visualización de datos actualizados (2021–2024)</p>
+  <header class="animated-header">
+    <div class="header-side">
+      <img class="header-logo" src="logouni.jpg" alt="Logo izquierdo">
+    </div>
+
+    <div class="header-center">
+      <h1 class="header-title">Incendios Forestales en el Estado de México</h1>
+      <p class="header-sub">Visualización de datos actualizados (2021–2024)</p>
+    </div>
+
+    <div class="header-side">
+      <img class="header-logo" src="logouni.jpg" alt="Logo derecho">
+    </div>
   </header>
 
   <div class="section">
@@ -67,5 +189,5 @@
   </div>
 
   <script src="script.js"></script>
-</body>
+
 </html>
