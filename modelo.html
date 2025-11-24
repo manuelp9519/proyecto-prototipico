@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modelo Predictivo - Incendios</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+  <header class="animated-header">
+    <div class="header-side"><img class="header-logo" src="logouni.jpg" alt="Logo"></div>
+    <div class="header-center">
+      <h1 class="header-title">Modelo Predictivo</h1>
+      <p class="header-sub">Análisis y Proyección de Riesgos</p>
+    </div>
+    <div class="header-side"><img class="header-logo" src="logouni.jpg" alt="Logo"></div>
+  </header>
+
+  <nav class="main-nav">
+    <a href="index.html" class="nav-link">Inicio & Datos</a>
+    <a href="modelo.html" class="nav-link active">Modelo Predictivo</a>
+    <a href="costos.html" class="nav-link">Costos y Sostenibilidad</a>
+  </nav>
+
+  <div class="section">
+    <div class="card">
+        <h2>Sistema de Predicción</h2>
+        <p>Esta sección integra herramientas para la detección temprana y análisis de riesgo.</p>
+        
+        <div style="margin-bottom: 15px;">
+          <input id="externalUrl" type="text" placeholder="https://forestales.ujed.mx/incendios2/" />
+          <button id="loadExternal">Cargar Fuente Externa</button>
+        </div>
+        <div class="iframe-container">
+          <iframe id="externalFrame" src="about:blank"></iframe>
+        </div>
+    </div>
+    
+    <div class="card">
+        <h3>Próximamente: Modelo de Machine Learning</h3>
+        <p>En desarrollo: Implementación de modelo Random Forest para predicción local basada en variables meteorológicas.</p>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

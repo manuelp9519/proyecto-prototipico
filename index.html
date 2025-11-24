@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dashboard: Incendios Forestales en Edomex</title>
+  <title>Inicio - Incendios Forestales</title>
   <link rel="stylesheet" href="styles.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -11,25 +11,62 @@
 <body>
 
   <header class="animated-header">
-    <div class="header-side">
-      <img class="header-logo" src="logouni.jpg" alt="Logo izquierdo">
-    </div>
-
+    <div class="header-side"><img class="header-logo" src="logouni.jpg" alt="Logo"></div>
     <div class="header-center">
-      <h1 class="header-title">Incendios Forestales en el Estado de México</h1>
-      <p class="header-sub">Visualización de datos actualizados (2021–2024)</p>
+      <h1 class="header-title">Proyecto Prototípico</h1>
+      <p class="header-sub">Desastres Naturales y Responsabilidad Social</p>
     </div>
-
-    <div class="header-side">
-      <img class="header-logo" src="logouni.jpg" alt="Logo derecho">
-    </div>
+    <div class="header-side"><img class="header-logo" src="logouni.jpg" alt="Logo"></div>
   </header>
 
+  <nav class="main-nav">
+    <a href="index.html" class="nav-link active">Inicio & Datos</a>
+    <a href="modelo.html" class="nav-link">Modelo Predictivo</a>
+    <a href="costos.html" class="nav-link">Costos y Sostenibilidad</a>
+  </nav>
+
   <div class="section">
-    
+
     <div class="card">
-      <h2>Visualizaciones Interactivas</h2>
-      <p style="margin-bottom: 15px; color: #666;">Haz clic en los encabezados para desplegar cada gráfico.</p>
+      <h2>Contexto e Impacto Social</h2>
+      <div class="info-grid">
+        <div class="info-box">
+          <h3>¿Qué es un incendio forestal?</h3>
+          <p>Fuego de rápida propagación que se extiende sobre áreas de vegetación. Puede ser provocado por actividades humanas o fenómenos naturales.</p>
+          <p><strong>Dato Crítico:</strong> El 99% de los incendios en México son causados por actividades humanas (hogueras, colillas, quemas agrícolas).</p>
+        </div>
+        <div class="info-box">
+          <h3>Zonas de Riesgo (Edomex)</h3>
+          <p>Municipios con mayor incidencia según CONAFOR:</p>
+          <ul>
+            <li>Ocuilan, Ixtapaluca</li>
+            <li>Nicolás Romero, Villa del Carbón</li>
+            <li>Valle de Bravo (Zona turística vulnerable)</li>
+          </ul>
+          <p><strong>Temporada Crítica:</strong> De Enero a Junio.</p>
+        </div>
+      </div>
+      
+      <h3>Medidas de Prevención</h3>
+      <div class="prevention-steps">
+        <div class="step-card">
+          <h4>Antes</h4>
+          <p>Evita fogatas, no arrojes colillas, reporta humo al 911, no quemes basura.</p>
+        </div>
+        <div class="step-card">
+          <h4>Durante</h4>
+          <p>Evacúa, cubre nariz y boca (paño húmedo), aléjate de barrancos, sigue rutas de evacuación.</p>
+        </div>
+        <div class="step-card">
+          <h4>Después</h4>
+          <p>No regreses hasta que sea seguro, evita zonas calientes, reporta reactivaciones.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Análisis de Datos Históricos (2021-2024)</h2>
+      <p style="margin-bottom: 15px; color: #666;">Haz clic en los encabezados para desplegar cada gráfico interactivo.</p>
       
       <div class="accordion-container">
         <button class="accordion-header active">
@@ -93,7 +130,7 @@
         </div>
       </div>
     </div>
-  
+
     <div class="card">
       <h2>Contador Total de Incendios (2021-2024)</h2>
       <div class="counter-container">
@@ -104,43 +141,56 @@
         <div class="info-wrapper">
           <p id="totalInfo" style="font-size: 1.1em; line-height: 1.5;">
             <i class="fa-solid fa-circle-info" style="color: #B22222;"></i> 
-            Progreso animado del total histórico acumulado. El contador se reinicia cíclicamente para visualizar la magnitud.
+            Progreso animado del total histórico acumulado. Visualización cíclica para dimensionar el impacto total.
           </p>
         </div>
       </div>
     </div>
 
     <div class="card" id="statsCard">
-      <h2>Estadísticas Clave</h2>
-      <div class="stats-grid">
-        <div class="stat-col card stat-year-card">
-          <h3><i class="fa-regular fa-calendar-check"></i> Desglose por Año</h3>
-          <div class="year-header">
-            <span>Año</span>
-            <span>Incendios / Superficie</span>
-          </div>
-          <div id="yearListCard" class="styled-list">Cargando...</div>
+        <h2>Resumen Estadístico</h2>
+        <div class="stats-grid">
+            <div class="stat-col card stat-year-card">
+              <h3><i class="fa-regular fa-calendar-check"></i> Desglose Anual</h3>
+              <div class="year-header">
+                <span>Año</span>
+                <span>Incendios / Superficie</span>
+              </div>
+              <div id="yearListCard" class="styled-list">Cargando...</div>
+            </div>
+            
+            <div class="stat-col card stat-general-card">
+              <h3><i class="fa-solid fa-calculator"></i> Métricas Generales</h3>
+              <div id="generalStatsCard">Cargando...</div>
+            </div>
         </div>
-        
-        <div class="stat-col card stat-general-card">
-          <h3><i class="fa-solid fa-calculator"></i> Métricas Generales</h3>
-          <div id="generalStatsCard">Cargando...</div>
+    </div>
+
+    <div class="card">
+      <h2>En caso de Emergencia</h2>
+      <div class="info-grid">
+        <div>
+           <ul class="emergency-numbers">
+             <li><strong>Emergencias:</strong> 911</li>
+             <li><strong>Incendios Forestales:</strong> 800 46 23 63 46</li>
+             <li><strong>Protección Civil:</strong> 55 51 28 00 00</li>
+             <li><strong>LOCATEL:</strong> 55 56 58 11 11</li>
+             <li><strong>Denuncia Anónima:</strong> 089</li>
+           </ul>
+        </div>
+        <div class="team-container">
+          <h3>Equipo de Ciencia de Datos (Grupo 203)</h3>
+          <p class="team-list">
+            Manuel Palma Garay <br>
+            David Ramsés Lugo Hernández <br>
+            Leslie Paola Alvarado Cruz <br>
+            Damián Sánchez Morales
+          </p>
         </div>
       </div>
     </div>
 
-    <div class="card">
-        <h2>Sistema de Predicción Externo</h2>
-        <div style="display: none;">
-          <input id="externalUrl" type="text" placeholder="https://forestales.ujed.mx/incendios2/" />
-          <button id="loadExternal">Cargar</button>
-        </div>
-        <div class="iframe-container">
-          <iframe id="externalFrame" src="about:blank"></iframe>
-        </div>
-      </div>
   </div>
-
   <script src="script.js"></script>
 </body>
 </html>
