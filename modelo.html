@@ -25,23 +25,151 @@
   </nav>
 
   <div class="section">
+    
     <div class="card">
-        <h2>Sistema de Predicción</h2>
-        <p>Esta sección integra herramientas para la detección temprana y análisis de riesgo.</p>
+        <h2><i class="fa-solid fa-map-location-dot"></i> Sistema Nacional de Predicción</h2>
+        <p>Visualización en tiempo real del peligro de incendios forestales, proporcionada por la colaboración entre CONAFOR y la Universidad Juárez del Estado de Durango (UJED).</p>
         
-        <div style="margin-bottom: 15px;">
-          <input id="externalUrl" type="text" placeholder="https://forestales.ujed.mx/incendios2/" />
-          <button id="loadExternal">Cargar Fuente Externa</button>
+        <div style="margin-bottom: 15px; display: flex; gap: 10px;">
+          <input id="externalUrl" type="text" value="https://forestales.ujed.mx/incendios2/" style="flex:1;" readonly />
+          <button id="loadExternal" title="Recargar mapa"><i class="fa-solid fa-rotate-right"></i></button>
         </div>
         <div class="iframe-container">
           <iframe id="externalFrame" src="about:blank"></iframe>
         </div>
+        <a href="http://forestales.ujed.mx/incendios/inicio/acerca_del_sistema.php" target="_blank" class="source-link">Fuente oficial: Sistema de Predicción de Peligro de Incendios Forestales de México</a>
+    </div>
+
+    <div class="card">
+      <h2><i class="fa-solid fa-book-open"></i> ¿Cómo funciona este modelo?</h2>
+      <p>El sistema actual utiliza una metodología científica que combina datos satelitales y factores humanos para calcular el riesgo diario. Se basa en tres índices principales:</p>
+      
+      <div class="info-grid">
+        <div class="info-box">
+          <h3>1. Índice de Sequedad (ISC)</h3>
+          <p>Mide el "estrés hídrico" o qué tan seca está la vegetación. Se calcula diariamente usando:</p>
+          <ul style="padding-left: 20px; color: #555;">
+            <li><i class="fa-solid fa-temperature-half" style="color:#B22222"></i> <strong>Temperatura:</strong> Datos en tiempo real.</li>
+            <li><i class="fa-solid fa-cloud-rain" style="color:#3498db"></i> <strong>Precipitación:</strong> Lluvias acumuladas.</li>
+            <li><i class="fa-solid fa-leaf" style="color:#2ecc71"></i> <strong>NDVI:</strong> Verdor de la vegetación.</li>
+          </ul>
+        </div>
+
+        <div class="info-box">
+          <h3>2. Peligro Meteorológico</h3>
+          <p>Combina la sequedad (ISC) con las características físicas del terreno para prever la ignición:</p>
+          <ul style="padding-left: 20px; color: #555;">
+            <li><i class="fa-solid fa-tree" style="color:#27ae60"></i> <strong>Tipo de Vegetación:</strong> Bosque, selva o pastizal.</li>
+            <li><i class="fa-solid fa-fire-flame-curved" style="color:#e67e22"></i> <strong>Puntos de Calor:</strong> Detección satelital de fuego activo.</li>
+            <li><i class="fa-solid fa-layer-group"></i> <strong>Ecorregión:</strong> Características de la zona.</li>
+          </ul>
+        </div>
+
+        <div class="info-box">
+          <h3>3. Riesgo Antropogénico</h3>
+          <p>Ajusta el peligro basándose en la actividad humana (causa del 99% de incendios):</p>
+          <ul style="padding-left: 20px; color: #555;">
+            <li><i class="fa-solid fa-road"></i> <strong>Carreteras:</strong> Zonas de fácil acceso.</li>
+            <li><i class="fa-solid fa-city"></i> <strong>Poblados:</strong> Proximidad (2-3 km) a localidades.</li>
+            <li><i class="fa-solid fa-clock-rotate-left"></i> <strong>Historial:</strong> Base de datos 2005-2018.</li>
+          </ul>
+        </div>
+      </div>
+
+      <h3>Interpretación de Niveles</h3>
+      <table class="risk-table">
+        <thead>
+          <tr>
+            <th>Nivel</th>
+            <th>Descripción Técnica</th>
+            <th>Acción Recomendada</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="color-box risk-low"></span> Bajo / Muy Bajo</td>
+            <td>Combustible húmedo (< 50 ISC). Generalmente tras lluvias.</td>
+            <td>Monitoreo estándar. Quemas agrícolas permitidas con precaución.</td>
+          </tr>
+          <tr>
+            <td><span class="color-box risk-med"></span> Medio</td>
+            <td>Sequedad moderada. Inicio de temporada crítica.</td>
+            <td>Precaución en zonas agrícolas. Aumento de patrullaje.</td>
+          </tr>
+          <tr>
+            <td><span class="color-box risk-high"></span> Alto</td>
+            <td>Ausencia de lluvia por semanas (ISC > 60).</td>
+            <td>Restricción de quemas. Brigadas en alerta amarilla.</td>
+          </tr>
+          <tr>
+            <td><span class="color-box risk-ext"></span> Muy Alto / Extremo</td>
+            <td>Sequedad histórica máxima (ISC > 92). Propagación explosiva.</td>
+            <td><strong>Prohibición total de fuego.</strong> Evacuación preventiva en zonas de interfaz.</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
     
-    <div class="card">
-        <h3>Próximamente: Modelo de Machine Learning</h3>
-        <p>En desarrollo: Implementación de modelo Random Forest para predicción local basada en variables meteorológicas.</p>
+    <div class="card proposal-card">
+        <h3><i class="fa-solid fa-calculator"></i> Calculadora de Riesgo: Valle de Bravo</h3>
+        
+        <p>Esta herramienta simula en tiempo real la probabilidad de incendio basándose en las variables críticas del modelo: temperatura y humedad. Mueve los controles para observar cómo cambia el riesgo.</p>
+
+        <div class="simulator-container">
+            
+            <div class="sim-control-group">
+                <label class="sim-label">
+                    <i class="fa-solid fa-temperature-three-quarters sim-icon-temp"></i> Temperatura (°C): <span id="valTemp" class="sim-val">25</span>°C
+                </label>
+                <input type="range" id="inputTemp" min="10" max="45" value="25" class="sim-range temp">
+            </div>
+
+            <div class="sim-control-group">
+                <label class="sim-label">
+                    <i class="fa-solid fa-droplet sim-icon-hum"></i> Humedad Relativa (%): <span id="valHum" class="sim-val">40</span>%
+                </label>
+                <input type="range" id="inputHum" min="0" max="100" value="40" class="sim-range hum">
+            </div>
+
+            <div class="sim-result-box">
+                <p class="sim-formula">
+                    Fórmula Sigmoide: P = 1 / (1 + e<sup>-z</sup>)
+                </p>
+                
+                <h2 id="resultProb" class="sim-result-value">0%</h2>
+                
+                <div class="sim-badge-container">
+                    <span id="resultText" class="sim-badge">Esperando datos...</span>
+                </div>
+            </div>
+            
+        </div>
+
+        <details class="sim-details">
+            <summary class="sim-summary">
+                <i class="fa-solid fa-circle-question"></i> ¿Qué es una Regresión Logística? (Explicación simple)
+            </summary>
+            <div class="sim-explanation">
+                <p style="margin-top: 0;">Imagina que quieres medir el riesgo de algo, pero no quieres números infinitos ni confusos. La <strong>Regresión Logística</strong> es como un "regulador inteligente" que:</p>
+                <ul style="padding-left: 20px; margin-bottom: 0;">
+                    <li style="margin-bottom: 8px;"><strong>Pone límites reales:</strong> Obliga al resultado a estar siempre entre <strong>0% y 100%</strong>. Nunca te dirá que hay un "200% de probabilidad", lo cual sería imposible.</li>
+                    <li style="margin-bottom: 8px;"><strong>Detecta el "Punto de Quiebre":</strong> Funciona como una curva en forma de "S". El riesgo puede mantenerse bajo por un tiempo, pero cuando la temperatura cruza cierto límite crítico, la curva sube rápidamente hacia el peligro.</li>
+                    <li><strong>Es consistente:</strong> Respeta la lógica física: <em>más calor</em> siempre aumenta el riesgo, y <em>más humedad</em> siempre lo disminuye.</li>
+                </ul>
+            </div>
+        </details>
+
+        <div class="proposal-features">
+            <span class="feature-tag"><i class="fa-solid fa-code"></i> JavaScript (Lógica)</span>
+            <span class="feature-tag"><i class="fa-solid fa-calculator"></i> Cálculo Diferencial</span>
+            <span class="feature-tag"><i class="fa-solid fa-square-root-variable"></i> Álgebra Lineal</span>
+        </div>
+
+        <a href="costos.html" class="cta-button">
+            Ver Análisis de Costos y Sostenibilidad <i class="fa-solid fa-arrow-right"></i>
+        </a>
     </div>
+
   </div>
 
   <script src="script.js"></script>

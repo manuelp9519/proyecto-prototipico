@@ -1,28 +1,34 @@
 # Plataforma Web: Proyecto Prototípico de Incendios Forestales
 
-Este proyecto es una solución integral web desarrollada para la **Universidad Nacional Rosario Castellanos** (Grupo 203). Su objetivo es concientizar sobre los incendios forestales en el Estado de México, presentar datos históricos (2021-2024) y ofrecer herramientas de predicción, todo alineado con los ODS de la Agenda 2030.
+Este proyecto es una solución integral web desarrollada para la **Universidad Nacional Rosario Castellanos** (Grupo 203). Su objetivo es concientizar sobre los incendios forestales en el Estado de México, presentar datos históricos (2021-2024) y ofrecer herramientas de predicción matemática, todo alineado con los ODS de la Agenda 2030.
 
 ## 📋 Descripción General
 
-La plataforma ha evolucionado de un dashboard estático a un sitio web informativo y analítico con tres módulos principales:
-1.  **Inicio y Contexto:** Información educativa basada en folletos de divulgación y visualización de datos históricos.
-2.  **Modelo Predictivo:** Sección dedicada a herramientas de predicción (iframe externo y futuro modelo de Machine Learning).
-3.  **Costos y Sostenibilidad:** Análisis de viabilidad económica e impacto ambiental.
+La plataforma ha evolucionado de un dashboard estático a un sitio web informativo, analítico e interactivo con tres módulos principales:
+
+1.  **Inicio y Contexto:** Dashboard con visualización de datos históricos, KPIs animados e información educativa basada en folletos de divulgación.
+2.  **Modelo Predictivo:**
+    * Integración del Sistema Nacional de Predicción (CONAFOR/UJED).
+    * **Simulador de Riesgo Local:** Una herramienta interactiva desarrollada por el equipo que aplica **Regresión Logística** para calcular la probabilidad de incendio en Valle de Bravo en tiempo real.
+3.  **Costos y Sostenibilidad:** Análisis financiero detallado, retorno de inversión (ROI) del prototipo y su impacto en los Objetivos de Desarrollo Sostenible.
 
 ## 🚀 Características Principales
 
-* **Arquitectura Multi-página:** Navegación fluida entre Contexto, Modelo y Costos.
-* **Identidad Institucional:** Diseño UI adaptado a la paleta de colores oficial de la UNRC (Guinda #9F2241).
-* **Visualización de Datos:** 6 tipos de gráficos interactivos (Chart.js) y tarjetas de estadísticas avanzadas.
-* **Contenido Educativo:** Integración de información sobre prevención, causas y números de emergencia.
-* **Robustez Técnica:** Scripts optimizados para cargar componentes dinámicamente según la página activa.
+* **Simulador Matemático Interactivo:** Implementación de la función Sigmoide para el cálculo de probabilidades basado en variables meteorológicas (Temperatura y Humedad), sin uso de librerías externas de IA.
+* **Arquitectura Modular:** Separación clara de responsabilidades (HTML Estructural, CSS Unificado, JS Centralizado).
+* **Visualización de Datos Avanzada:** 8 tipos de gráficos interactivos (Chart.js) incluyendo proyecciones presupuestales y tendencias históricas.
+* **Identidad Institucional:** Diseño UI consistente con la paleta de colores oficial de la UNRC (Guinda #9F2241) y animaciones CSS fluidas.
+* **Experiencia de Usuario (UX):** Navegación intuitiva, acordeones exclusivos para manejo de información y contadores dinámicos.
 
 ## 🛠️ Tecnologías Utilizadas
 
-* **HTML5:** Estructura semántica modular.
-* **CSS3:** Estilos personalizados, Flexbox/Grid y animaciones CSS.
-* **JavaScript (ES6):** Lógica de negocio, manipulación del DOM y cálculos estadísticos.
-* **Chart.js:** Librería para visualización de datos.
+* **HTML5:** Estructura semántica y accesibilidad.
+* **CSS3:** Diseño responsivo, Grid/Flexbox y animaciones personalizadas.
+* **JavaScript (ES6):**
+    * Lógica de negocio y manipulación del DOM.
+    * Implementación de algoritmos matemáticos (Cálculo/Álgebra).
+    * Manejo de eventos y observadores de intersección.
+* **Chart.js:** Librería para renderizado de gráficos dinámicos.
 
 ## 👥 Equipo de Desarrollo (Grupo 203)
 
@@ -35,9 +41,9 @@ La plataforma ha evolucionado de un dashboard estático a un sitio web informati
 
 ```text
 proyecto-prototipico/
-├── index.html      # [INICIO] Contexto, folleto informativo y dashboard de datos
-├── modelo.html     # [MODELO] Iframe de predicción y futuras herramientas ML
-├── costos.html     # [COSTOS] Estructura para desglose financiero y ODS
-├── styles.css      # Estilos globales (Tema Institucional UNRC)
-├── script.js       # Lógica modular (Manejo de errores y gráficas)
+├── index.html      # [INICIO] Dashboard de datos, KPIs animados y contexto educativo
+├── modelo.html     # [MODELO] Simulador de Regresión Logística y visualización externa
+├── costos.html     # [COSTOS] Análisis financiero, gráficas de presupuesto y ROI
+├── styles.css      # Hoja de estilos unificada (Diseño Institucional + Componentes)
+├── script.js       # Lógica centralizada (Gráficos, Simulador, Interacciones)
 └── README.md       # Documentación técnica del proyecto
