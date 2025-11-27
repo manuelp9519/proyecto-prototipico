@@ -1,9 +1,6 @@
 // ==========================================
-// 1. DATOS BASE (Compartidos en el Proyecto)
+// 1. CONFIGURACIÓN Y UTILIDADES
 // ==========================================
-const labels = ['2021','2022','2023','2024'];
-const incendios = [1453,1046,927,818];
-const superficie = [14168,9467,20000,1450];
 
 // Opciones comunes para gráficos Chart.js
 const commonOptions = { 
@@ -18,7 +15,7 @@ function ctx(id){
     return el ? el.getContext('2d') : null; 
 }
 
-// Función para formatear números (ej: 1,200)
+// Función para formatear números
 function formatNumber(n){ 
     return Number(n).toLocaleString(undefined, {maximumFractionDigits: 1}); 
 }
@@ -46,123 +43,141 @@ function calculatePearson(x, y) {
 }
 
 // ==========================================
-// 2. LÓGICA DE INICIO (Index.html)
+// 2. LÓGICA DE INICIO (Index.html) - CARGA ASÍNCRONA
 // ==========================================
 
-// Inicializar Gráficos Principales
-if(document.getElementById('lineChart')) {
-    new Chart(ctx('lineChart'), { type:'line', data:{ labels: labels, datasets:[{ label:'Incendios Forestales', data:incendios, borderColor:'#B22222', backgroundColor:'rgba(178,34,34,0.1)', fill:true, tension:0.3 }] }, options: commonOptions });
-    new Chart(ctx('barChart'), { type:'bar', data:{ labels: labels, datasets:[{ label:'Superficie (ha)', data: superficie, backgroundColor:'#B22222' }] }, options: commonOptions });
-    new Chart(ctx('pieChart'), { type:'pie', data:{ labels: labels, datasets:[{ data:incendios, backgroundColor:['#9F2241','#B22222','#CD5C5C','#FA8072'] }] }, options: commonOptions });
-    new Chart(ctx('areaChart'), { type:'line', data:{ labels: labels, datasets:[{ label:'Acumulado', data: incendios.reduce((a,v,i)=>[...a, v+(a[i-1]||0)],[]), backgroundColor:'rgba(178,34,34,0.2)', borderColor:'#B22222', fill:true }] }, options: commonOptions });
-    // En la sección: Inicializar Gráficos Principales
+async function initDashboard() {
+    // Solo ejecutamos si estamos en el index (buscando un elemento clave)
+    if(!document.getElementById('lineChart')) return;
 
-    new Chart(ctx('groupedChart'), { 
-        type: 'bar', 
-        data: { 
-            labels: labels, 
-            datasets: [
-                { 
-                    label: 'Incendios (Cantidad)', 
-                    data: incendios, 
-                    backgroundColor: '#B22222',
-                    yAxisID: 'y', // Asignado al eje izquierdo
-                    order: 2
-                }, 
-                { 
-                    label: 'Superficie (Ha)', 
-                    data: superficie, 
-                    backgroundColor: '#2c3e50', // Color oscuro para contraste
-                    type: 'line', // Combinamos línea con barra para mejor lectura
-                    borderColor: '#2c3e50',
-                    borderWidth: 3,
-                    yAxisID: 'y1', // Asignado al eje derecho
-                    order: 1
-                } 
-            ] 
-        }, 
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            interaction: { mode: 'index', intersect: false },
-            scales: {
-                y: {
-                    type: 'linear',
-                    display: true,
-                    position: 'left',
-                    title: { display: true, text: 'N° Incendios' }
-                },
-                y1: {
-                    type: 'linear',
-                    display: true,
-                    position: 'right',
-                    grid: { drawOnChartArea: false }, // Evita líneas duplicadas en el fondo
-                    title: { display: true, text: 'Hectáreas Afectadas' }
+    try {
+        // A. SIMULACIÓN DE API (Fetch)
+        const response = await fetch('data.json');
+        if (!response.ok) throw new Error('Error de red al cargar JSON');
+        const db = await response.json();
+
+        // Desestructuración de datos (Extraemos las constantes del JSON)
+        const { labels, incendios, superficie } = db;
+
+        // B. Inicializar Gráficos Principales
+        new Chart(ctx('lineChart'), { type:'line', data:{ labels: labels, datasets:[{ label:'Incendios Forestales', data:incendios, borderColor:'#B22222', backgroundColor:'rgba(178,34,34,0.1)', fill:true, tension:0.3 }] }, options: commonOptions });
+        new Chart(ctx('barChart'), { type:'bar', data:{ labels: labels, datasets:[{ label:'Superficie (ha)', data: superficie, backgroundColor:'#B22222' }] }, options: commonOptions });
+        new Chart(ctx('pieChart'), { type:'pie', data:{ labels: labels, datasets:[{ data:incendios, backgroundColor:['#9F2241','#B22222','#CD5C5C','#FA8072'] }] }, options: commonOptions });
+        new Chart(ctx('areaChart'), { type:'line', data:{ labels: labels, datasets:[{ label:'Acumulado', data: incendios.reduce((a,v,i)=>[...a, v+(a[i-1]||0)],[]), backgroundColor:'rgba(178,34,34,0.2)', borderColor:'#B22222', fill:true }] }, options: commonOptions });
+        
+        // Eje Dual (Incendios vs Superficie)
+        new Chart(ctx('groupedChart'), { 
+            type: 'bar', 
+            data: { 
+                labels: labels, 
+                datasets: [
+                    { 
+                        label: 'Incendios', 
+                        data: incendios, 
+                        backgroundColor: '#B22222',
+                        yAxisID: 'y', 
+                        order: 2
+                    }, 
+                    { 
+                        label: 'Superficie (Ha)', 
+                        data: superficie, 
+                        backgroundColor: '#2c3e50', 
+                        type: 'line', 
+                        borderColor: '#2c3e50',
+                        borderWidth: 3,
+                        yAxisID: 'y1', 
+                        order: 1
+                    } 
+                ] 
+            }, 
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: { mode: 'index', intersect: false },
+                scales: {
+                    y: { type: 'linear', display: true, position: 'left', title: {display:true, text:'Cantidad'} },
+                    y1: { type: 'linear', display: true, position: 'right', grid: {drawOnChartArea: false}, title: {display:true, text:'Hectáreas'} }
                 }
             }
+        });
+
+        // C. Construir lista "Desglose Anual"
+        const yearListEl = document.getElementById('yearListCard');
+        if(yearListEl) {
+            yearListEl.innerHTML = ''; 
+            yearListEl.className = 'styled-list'; 
+            for(let i=0; i<labels.length; i++){
+                const row = document.createElement('div'); 
+                row.className='year-row';
+                row.innerHTML = `
+                    <div class="year-badge">${labels[i]}</div>
+                    <div class="data-group">
+                        <div class="data-point" title="Incendios"><i class="fa-solid fa-fire"></i> ${formatNumber(incendios[i])}</div>
+                        <div class="data-point" title="Superficie (ha)"><i class="fa-solid fa-tree"></i> ${formatNumber(superficie[i])} ha</div>
+                    </div>`;
+                yearListEl.appendChild(row);
+            }
         }
-    });
-    
-    // A. Construir lista "Desglose Anual"
-    const yearListEl = document.getElementById('yearListCard');
-    if(yearListEl) {
-        yearListEl.innerHTML = ''; 
-        yearListEl.className = 'styled-list'; 
-        for(let i=0; i<labels.length; i++){
-            const row = document.createElement('div'); 
-            row.className='year-row';
-            row.innerHTML = `
-                <div class="year-badge">${labels[i]}</div>
-                <div class="data-group">
-                    <div class="data-point" title="Incendios"><i class="fa-solid fa-fire"></i> ${formatNumber(incendios[i])}</div>
-                    <div class="data-point" title="Superficie (ha)"><i class="fa-solid fa-tree"></i> ${formatNumber(superficie[i])} ha</div>
-                </div>`;
-            yearListEl.appendChild(row);
+
+        // D. Construir "Métricas Generales"
+        const generalStatsEl = document.getElementById('generalStatsCard');
+        if(generalStatsEl) {
+            // Cálculos
+            const totalInc = incendios.reduce((s,v)=>s+v,0);
+            const totalSup = superficie.reduce((s,v)=>s+v,0);
+            
+            const avgInc = Math.round(totalInc / incendios.length);
+            const avgSup = Math.round(totalSup / superficie.length);
+            
+            const maxInc = Math.max(...incendios); 
+            const maxIncYear = labels[incendios.indexOf(maxInc)];
+            const pctChange = ((incendios[incendios.length-1] - incendios[0]) / incendios[0]) * 100;
+            const medianInc = median(incendios);
+
+            // CORRELACIÓN DE PEARSON
+            const pearson = calculatePearson(incendios, superficie);
+            const correlationText = Math.abs(pearson) < 0.3 ? 'Baja/Nula' : (pearson > 0 ? 'Positiva' : 'Inversa');
+
+            generalStatsEl.innerHTML = '<div class="metrics-grid"></div>';
+            const grid = generalStatsEl.querySelector('.metrics-grid');
+            
+            const createMetric = (t, v, s, c = '') => 
+                `<div class="metric-box ${c}"><h4>${t}</h4><span class="metric-value">${v}</span><span class="metric-sub">${s}</span></div>`;
+
+            let h = '';
+            h += createMetric('Total Incendios', formatNumber(totalInc), '2021-2024', 'accent-red');
+            h += createMetric('Total Superficie', formatNumber(totalSup), 'Hectáreas', 'accent-green');
+            h += createMetric('Promedio Anual', formatNumber(avgInc), 'Incendios', 'accent-orange');
+            h += createMetric('Promedio Superficie', formatNumber(avgSup), 'Ha por año', 'accent-blue');
+            h += createMetric('Mediana', formatNumber(medianInc), 'Valor central', 'accent-orange');
+            h += createMetric('Pico Máximo', formatNumber(maxInc), `Año ${maxIncYear}`, 'accent-red');
+            h += createMetric('Tendencia', `${pctChange > 0 ? '+' : ''}${pctChange.toFixed(1)}%`, 'Cambio Total', pctChange > 0 ? 'accent-red' : 'accent-green');
+            h += createMetric('Correlación', pearson.toFixed(2), correlationText, 'accent-blue'); // Nueva métrica
+            
+            grid.innerHTML = h;
         }
-    }
 
-    // B. Construir "Métricas Generales"
-    const generalStatsEl = document.getElementById('generalStatsCard');
-    if(generalStatsEl) {
-        const totalInc = incendios.reduce((s,v)=>s+v,0);
-        const totalSup = superficie.reduce((s,v)=>s+v,0);
-        const avgInc = Math.round(totalInc / incendios.length);
-        const avgSup = Math.round(totalSup / superficie.length);
-        const maxInc = Math.max(...incendios); 
-        const maxIncYear = labels[incendios.indexOf(maxInc)];
-        const pctChange = ((incendios[incendios.length-1] - incendios[0]) / incendios[0]) * 100;
-        const medianInc = median(incendios);
-        const pearson = calculatePearson(incendios, superficie);
-        const correlationText = pearson > 0.7 ? 'Alta directa' : 
-                                pearson < -0.7 ? 'Alta inversa' : 
-                                Math.abs(pearson) < 0.3 ? 'Nula/Baja' : 'Moderada';
+        // E. Contador Animado (Debe estar dentro del async para tener acceso a los datos)
+        initCounterAnimation(incendios);
 
-        generalStatsEl.innerHTML = '<div class="metrics-grid"></div>';
-        const grid = generalStatsEl.querySelector('.metrics-grid');
-        
-        const createMetric = (t, v, s, c = '') => 
-            `<div class="metric-box ${c}"><h4>${t}</h4><span class="metric-value">${v}</span><span class="metric-sub">${s}</span></div>`;
-
-        let h = '';
-        h += createMetric('Total Incendios', formatNumber(totalInc), '2021-2024', 'accent-red');
-        h += createMetric('Total Superficie', formatNumber(totalSup), 'Hectáreas', 'accent-green');
-        h += createMetric('Promedio Anual', formatNumber(avgInc), 'Incendios', 'accent-orange');
-        h += createMetric('Promedio Superficie', formatNumber(avgSup), 'Ha por año', 'accent-blue');
-        h += createMetric('Mediana', formatNumber(medianInc), 'Valor central', 'accent-orange');
-        h += createMetric('Pico Máximo', formatNumber(maxInc), `Año ${maxIncYear}`, 'accent-red');
-        h += createMetric('Tendencia', `${pctChange > 0 ? '+' : ''}${pctChange.toFixed(1)}%`, 'Cambio Total', pctChange > 0 ? 'accent-red' : 'accent-green');
-        h += createMetric('Correlación', pearson.toFixed(2), correlationText, 'accent-blue');
-        
-        grid.innerHTML = h;
+    } catch (error) {
+        console.error('Error cargando el Dashboard:', error);
+        document.querySelector('.section').innerHTML += `<p style="color:red; text-align:center;">Error cargando datos: Revisa que estés usando un servidor local (Live Server).</p>`;
     }
 }
 
-// --- RESTAURADO Y MEJORADO: Contador Animado Infinito ---
-const donutCanvas = document.getElementById('totalDonut');
-if(donutCanvas) {
+// Ejecutar Dashboard
+document.addEventListener('DOMContentLoaded', initDashboard);
+
+
+// --- Función separada para la animación del donut ---
+function initCounterAnimation(incendiosData) {
+    const donutCanvas = document.getElementById('totalDonut');
+    if(!donutCanvas) return;
+
     const totalCtx = donutCanvas.getContext('2d');
     const totalLabel = document.getElementById('totalLabel');
-    const totalVal = incendios.reduce((s,v)=>s+v,0);
+    const totalVal = incendiosData.reduce((s,v)=>s+v,0);
 
     let totalDonutInst = new Chart(totalCtx, {
         type: 'doughnut',
@@ -172,16 +187,15 @@ if(donutCanvas) {
 
     let counterAnimationId = null;
     
-    // Función de animación
     function runAnimation() {
-        if (counterAnimationId) cancelAnimationFrame(counterAnimationId); // Cancelar si ya existe para reiniciar
+        if (counterAnimationId) cancelAnimationFrame(counterAnimationId); 
         const durationMs = 2000;
         const start = performance.now();
         const from = 0; 
         
         function step(now) {
             const t = Math.min(1, (now - start) / durationMs);
-            const ease = t * (2 - t); // Ease-Out
+            const ease = t * (2 - t); 
             const value = Math.round(from + (totalVal - from) * ease);
             
             if(totalLabel) totalLabel.textContent = value.toLocaleString();
@@ -195,13 +209,9 @@ if(donutCanvas) {
         counterAnimationId = requestAnimationFrame(step);
     }
 
-    // Observer: Se dispara CADA VEZ que entra en pantalla
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => { 
-            if (entry.isIntersecting) {
-                runAnimation();
-                // NOTA: Eliminamos 'observer.unobserve' para que siga observando siempre
-            }
+            if (entry.isIntersecting) runAnimation();
         });
     }, { threshold: 0.5 });
     observer.observe(donutCanvas);

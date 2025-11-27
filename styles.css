@@ -47,7 +47,7 @@ header.animated-header {
 .header-title { margin: 0; font-size: 1.8rem; text-shadow: 0 1px 3px rgba(0,0,0,0.2); }
 .header-sub { margin: 0; font-size: 1rem; color: rgba(255,255,255,0.9); }
 
-/* Animaciones (Restauradas) */
+/* Animaciones */
 @keyframes headerFloat {
   0% { box-shadow: 0 2px 6px rgba(178,34,34,0.2); }
   50% { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(178,34,34,0.3); }
@@ -165,7 +165,7 @@ button#loadExternal { background-color: #B22222; color: white; border: none; cur
 .risk-ext { background-color: #c0392b; }
 .source-link { display: inline-block; margin-top: 10px; font-size: 0.85em; color: #666; text-decoration: underline; }
 
-/* --- NUEVO: Estilos del Simulador (Limpieza de HTML) --- */
+/* --- Estilos del Simulador --- */
 .proposal-card { border-left: 5px solid #2c3e50; background: #fff; }
 .simulator-container { background: white; padding: 25px; border-radius: 10px; margin: 20px 0; border: 1px solid #e0e0e0; box-shadow: inset 0 2px 5px rgba(0,0,0,0.02); }
 
