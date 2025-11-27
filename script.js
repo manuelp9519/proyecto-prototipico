@@ -182,39 +182,86 @@ if(loadBtn) {
         const frame = document.getElementById('externalFrame');
         if(frame) frame.src = document.getElementById('externalUrl').value;
     });
+    // Pequeño delay para asegurar carga
     setTimeout(() => loadBtn.click(), 500);
 }
 
+// Referencias a los 5 inputs del modelo
+const inputISC = document.getElementById('inputISC');
 const inputTemp = document.getElementById('inputTemp');
 const inputHum = document.getElementById('inputHum');
+const inputWind = document.getElementById('inputWind');
+const inputDays = document.getElementById('inputDays');
 
-if(inputTemp && inputHum) {
+// Solo ejecutamos si existen los elementos (estamos en modelo.html)
+if(inputISC && inputTemp && inputHum && inputWind && inputDays) {
+
+    // Coeficientes exactos del Reporte PDF (Regresión Logística Manual) 
+    const beta0 = -8.17124513;
+    const beta1 = 4.50336363;   // ISC
+    const beta2 = 5.71485795;   // Temp
+    const beta3 = -13.56025600; // Humedad (Negativo: más humedad = menos riesgo)
+    const beta4 = 4.57188636;   // Viento
+    const beta5 = 20.60845995;  // Días sin lluvia
+
     function calcularProbabilidad() {
-        const T = parseInt(inputTemp.value);
-        const H = parseInt(inputHum.value);
-        document.getElementById('valTemp').textContent = T;
-        document.getElementById('valHum').textContent = H;
+        // 1. Obtener valores crudos de la UI
+        const rawISC = parseFloat(inputISC.value);
+        const rawTemp = parseFloat(inputTemp.value);
+        const rawHum = parseFloat(inputHum.value);
+        const rawWind = parseFloat(inputWind.value);
+        const rawDays = parseFloat(inputDays.value);
 
-        // Fórmula: z = -10.5 + 0.45*T - 0.15*H (Coeficientes calibrados)
-        const z = -10.5 + (0.45 * T) + (-0.15 * H);
-        const prob = 1 / (1 + Math.exp(-z));
-        const pct = (prob * 100).toFixed(1);
+        // Actualizar etiquetas visuales
+        document.getElementById('valISC').textContent = rawISC;
+        document.getElementById('valTemp').textContent = rawTemp;
+        document.getElementById('valHum').textContent = rawHum;
+        document.getElementById('valWind').textContent = rawWind;
+        document.getElementById('valDays').textContent = rawDays;
 
+        // 2. Normalización de Variables (Tal cual el reporte PDF) 
+        // Esto es crucial: el modelo se entrenó con datos entre 0 y 1.
+        const x1 = rawISC / 100.0;
+        const x2 = rawTemp / 40.0;
+        const x3 = rawHum / 100.0;
+        const x4 = rawWind / 10.0;
+        const x5 = rawDays / 30.0;
+
+        // 3. Cálculo de Z (Suma ponderada)
+        const z = beta0 + (beta1 * x1) + (beta2 * x2) + (beta3 * x3) + (beta4 * x4) + (beta5 * x5);
+
+        // 4. Función Sigmoide
+        const prob = 1.0 / (1.0 + Math.exp(-z));
+        const pct = (prob * 100).toFixed(2); // Dos decimales para precisión técnica
+
+        // 5. Renderizado de resultados
         const resultProb = document.getElementById('resultProb');
         const resultText = document.getElementById('resultText');
 
         resultProb.textContent = pct + '%';
 
-        if(prob < 0.3) {
-            resultProb.style.color = '#2ecc71'; resultText.textContent = "Riesgo Bajo"; resultText.style.backgroundColor = '#2ecc71';
-        } else if (prob < 0.7) {
-            resultProb.style.color = '#f1c40f'; resultText.textContent = "Riesgo Medio"; resultText.style.backgroundColor = '#f1c40f';
+        // Umbrales visuales para feedback al usuario
+        // El reporte dice corte en 0.5 (50%), aquí damos feedback graduado
+        if(prob < 0.30) {
+            resultProb.style.color = '#2ecc71'; 
+            resultText.textContent = "Riesgo Bajo"; 
+            resultText.style.backgroundColor = '#2ecc71';
+        } else if (prob < 0.70) {
+            resultProb.style.color = '#f1c40f'; 
+            resultText.textContent = "Riesgo Medio"; 
+            resultText.style.backgroundColor = '#f1c40f';
         } else {
-            resultProb.style.color = '#c0392b'; resultText.textContent = "Riesgo Alto"; resultText.style.backgroundColor = '#c0392b';
+            resultProb.style.color = '#c0392b'; 
+            resultText.textContent = "¡PELIGRO ALTO!"; 
+            resultText.style.backgroundColor = '#c0392b';
         }
     }
-    inputTemp.addEventListener('input', calcularProbabilidad);
-    inputHum.addEventListener('input', calcularProbabilidad);
+
+    // Listeners para los 5 inputs
+    const inputs = [inputISC, inputTemp, inputHum, inputWind, inputDays];
+    inputs.forEach(el => el.addEventListener('input', calcularProbabilidad));
+
+    // Cálculo inicial
     calcularProbabilidad();
 }
 

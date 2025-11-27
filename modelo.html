@@ -119,28 +119,53 @@
             
             <div class="sim-control-group">
                 <label class="sim-label">
-                    <i class="fa-solid fa-temperature-three-quarters sim-icon-temp"></i> Temperatura (°C): <span id="valTemp" class="sim-val">25</span>°C
+                    <i class="fa-solid fa-fire-flame-simple sim-icon-temp"></i> 1. Índice de Sequedad (ISC): <span id="valISC" class="sim-val">35</span> pts
                 </label>
-                <input type="range" id="inputTemp" min="10" max="45" value="25" class="sim-range temp">
+                <input type="range" id="inputISC" min="0" max="100" value="35" class="sim-range temp">
             </div>
 
             <div class="sim-control-group">
                 <label class="sim-label">
-                    <i class="fa-solid fa-droplet sim-icon-hum"></i> Humedad Relativa (%): <span id="valHum" class="sim-val">40</span>%
+                    <i class="fa-solid fa-temperature-three-quarters sim-icon-temp"></i> 2. Temperatura (°C): <span id="valTemp" class="sim-val">25</span>°C
+                </label>
+                <input type="range" id="inputTemp" min="0" max="40" value="25" class="sim-range temp">
+            </div>
+
+            <div class="sim-control-group">
+                <label class="sim-label">
+                    <i class="fa-solid fa-droplet sim-icon-hum"></i> 3. Humedad Relativa (%): <span id="valHum" class="sim-val">40</span>%
                 </label>
                 <input type="range" id="inputHum" min="0" max="100" value="40" class="sim-range hum">
             </div>
 
+            <div class="sim-control-group">
+                <label class="sim-label">
+                    <i class="fa-solid fa-wind" style="color: #7f8c8d; margin-right: 8px;"></i> 4. Viento (m/s): <span id="valWind" class="sim-val">3</span> m/s
+                </label>
+                <input type="range" id="inputWind" min="0" max="10" value="3" step="0.5" class="sim-range hum">
+            </div>
+
+            <div class="sim-control-group">
+                <label class="sim-label">
+                    <i class="fa-regular fa-calendar-xmark" style="color: #e67e22; margin-right: 8px;"></i> 5. Días sin lluvia: <span id="valDays" class="sim-val">5</span> días
+                </label>
+                <input type="range" id="inputDays" min="0" max="30" value="5" class="sim-range temp">
+            </div>
+
             <div class="sim-result-box">
                 <p class="sim-formula">
-                    Fórmula Sigmoide: P = 1 / (1 + e<sup>-z</sup>)
+                    Modelo Logístico Multivariante (5 Variables)
                 </p>
                 
-                <h2 id="resultProb" class="sim-result-value">0%</h2>
+                <h2 id="resultProb" class="sim-result-value">Calculando...</h2>
                 
                 <div class="sim-badge-container">
-                    <span id="resultText" class="sim-badge">Esperando datos...</span>
+                    <span id="resultText" class="sim-badge">---</span>
                 </div>
+                
+                <p style="font-size: 0.75em; color: #888; margin-top: 15px; font-style: italic;">
+                    * Coeficientes teóricos calibrados para fines de demostración del prototipo, basados en la literatura sobre comportamiento del fuego. El modelo utiliza normalización de vectores manual.
+                </p>
             </div>
             
         </div>
