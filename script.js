@@ -30,6 +30,21 @@ function median(arr){
     return a.length%2 ? a[m] : (a[m-1]+a[m])/2; 
 }
 
+// Función Estadística: Correlación de Pearson
+function calculatePearson(x, y) {
+    const n = x.length;
+    const sumX = x.reduce((a, b) => a + b, 0);
+    const sumY = y.reduce((a, b) => a + b, 0);
+    const sumXY = x.reduce((sum, xi, i) => sum + xi * y[i], 0);
+    const sumX2 = x.reduce((sum, xi) => sum + xi * xi, 0);
+    const sumY2 = y.reduce((sum, yi) => sum + yi * yi, 0);
+
+    const numerator = (n * sumXY) - (sumX * sumY);
+    const denominator = Math.sqrt((n * sumX2 - sumX * sumX) * (n * sumY2 - sumY * sumY));
+
+    return (denominator === 0) ? 0 : (numerator / denominator);
+}
+
 // ==========================================
 // 2. LÓGICA DE INICIO (Index.html)
 // ==========================================
@@ -40,9 +55,54 @@ if(document.getElementById('lineChart')) {
     new Chart(ctx('barChart'), { type:'bar', data:{ labels: labels, datasets:[{ label:'Superficie (ha)', data: superficie, backgroundColor:'#B22222' }] }, options: commonOptions });
     new Chart(ctx('pieChart'), { type:'pie', data:{ labels: labels, datasets:[{ data:incendios, backgroundColor:['#9F2241','#B22222','#CD5C5C','#FA8072'] }] }, options: commonOptions });
     new Chart(ctx('areaChart'), { type:'line', data:{ labels: labels, datasets:[{ label:'Acumulado', data: incendios.reduce((a,v,i)=>[...a, v+(a[i-1]||0)],[]), backgroundColor:'rgba(178,34,34,0.2)', borderColor:'#B22222', fill:true }] }, options: commonOptions });
-    new Chart(ctx('groupedChart'), { type:'bar', data:{ labels: labels, datasets:[ { label:'Incendios', data:incendios, backgroundColor:'#B22222' }, { label:'Superficie', data:superficie, backgroundColor:'#444' } ] }, options: commonOptions });
-    new Chart(ctx('monthlyChart'), { type:'line', data:{ labels:['Ene','Feb','Mar','Abr','May','Jun','Jul'], datasets:[{ label:'2024', data:[120,180,250,300,200,100,50], borderColor:'#B22222', tension:0.3 }] }, options: commonOptions });
+    // En la sección: Inicializar Gráficos Principales
 
+    new Chart(ctx('groupedChart'), { 
+        type: 'bar', 
+        data: { 
+            labels: labels, 
+            datasets: [
+                { 
+                    label: 'Incendios (Cantidad)', 
+                    data: incendios, 
+                    backgroundColor: '#B22222',
+                    yAxisID: 'y', // Asignado al eje izquierdo
+                    order: 2
+                }, 
+                { 
+                    label: 'Superficie (Ha)', 
+                    data: superficie, 
+                    backgroundColor: '#2c3e50', // Color oscuro para contraste
+                    type: 'line', // Combinamos línea con barra para mejor lectura
+                    borderColor: '#2c3e50',
+                    borderWidth: 3,
+                    yAxisID: 'y1', // Asignado al eje derecho
+                    order: 1
+                } 
+            ] 
+        }, 
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            interaction: { mode: 'index', intersect: false },
+            scales: {
+                y: {
+                    type: 'linear',
+                    display: true,
+                    position: 'left',
+                    title: { display: true, text: 'N° Incendios' }
+                },
+                y1: {
+                    type: 'linear',
+                    display: true,
+                    position: 'right',
+                    grid: { drawOnChartArea: false }, // Evita líneas duplicadas en el fondo
+                    title: { display: true, text: 'Hectáreas Afectadas' }
+                }
+            }
+        }
+    });
+    
     // A. Construir lista "Desglose Anual"
     const yearListEl = document.getElementById('yearListCard');
     if(yearListEl) {
@@ -72,6 +132,10 @@ if(document.getElementById('lineChart')) {
         const maxIncYear = labels[incendios.indexOf(maxInc)];
         const pctChange = ((incendios[incendios.length-1] - incendios[0]) / incendios[0]) * 100;
         const medianInc = median(incendios);
+        const pearson = calculatePearson(incendios, superficie);
+        const correlationText = pearson > 0.7 ? 'Alta directa' : 
+                                pearson < -0.7 ? 'Alta inversa' : 
+                                Math.abs(pearson) < 0.3 ? 'Nula/Baja' : 'Moderada';
 
         generalStatsEl.innerHTML = '<div class="metrics-grid"></div>';
         const grid = generalStatsEl.querySelector('.metrics-grid');
@@ -87,6 +151,7 @@ if(document.getElementById('lineChart')) {
         h += createMetric('Mediana', formatNumber(medianInc), 'Valor central', 'accent-orange');
         h += createMetric('Pico Máximo', formatNumber(maxInc), `Año ${maxIncYear}`, 'accent-red');
         h += createMetric('Tendencia', `${pctChange > 0 ? '+' : ''}${pctChange.toFixed(1)}%`, 'Cambio Total', pctChange > 0 ? 'accent-red' : 'accent-green');
+        h += createMetric('Correlación', pearson.toFixed(2), correlationText, 'accent-blue');
         
         grid.innerHTML = h;
     }
