@@ -42,6 +42,20 @@ function calculatePearson(x, y) {
     return (denominator === 0) ? 0 : (numerator / denominator);
 }
 
+// Función Estadística: Varianza y Desviación Estándar (Poblacional)
+function calculateStandardDeviation(arr) {
+    const n = arr.length;
+    if (n === 0) return { variance: 0, stdDev: 0 };
+    
+    const mean = arr.reduce((a, b) => a + b, 0) / n;
+    const variance = arr.reduce((a, b) => a + Math.pow(b - mean, 2), 0) / n;
+    
+    return {
+        variance: variance,
+        stdDev: Math.sqrt(variance)
+    };
+}
+
 // ==========================================
 // 2. LÓGICA DE INICIO (Index.html) - CARGA ASÍNCRONA
 // ==========================================
@@ -122,22 +136,32 @@ async function initDashboard() {
         // D. Construir "Métricas Generales"
         const generalStatsEl = document.getElementById('generalStatsCard');
         if(generalStatsEl) {
-            // Cálculos
+            // Cálculos Básicos
             const totalInc = incendios.reduce((s,v)=>s+v,0);
             const totalSup = superficie.reduce((s,v)=>s+v,0);
-            
             const avgInc = Math.round(totalInc / incendios.length);
             const avgSup = Math.round(totalSup / superficie.length);
-            
-            const maxInc = Math.max(...incendios); 
-            const maxIncYear = labels[incendios.indexOf(maxInc)];
-            const pctChange = ((incendios[incendios.length-1] - incendios[0]) / incendios[0]) * 100;
             const medianInc = median(incendios);
 
-            // CORRELACIÓN DE PEARSON
-            const pearson = calculatePearson(incendios, superficie);
-            const correlationText = Math.abs(pearson) < 0.3 ? 'Baja/Nula' : (pearson > 0 ? 'Positiva' : 'Inversa');
+            // Cálculos Avanzados
+            const statsInc = calculateStandardDeviation(incendios); // Desviación de incendios
+            
+            // Picos y Tendencias
+            const maxInc = Math.max(...incendios); 
+            const maxIncYear = labels[incendios.indexOf(maxInc)];
+            
+            const maxSup = Math.max(...superficie); // Pico Superficie
+            const maxSupYear = labels[superficie.indexOf(maxSup)]; // Año del pico
 
+            // Tendencias (% cambio inicio vs fin)
+            const pctChangeInc = ((incendios[incendios.length-1] - incendios[0]) / incendios[0]) * 100;
+            const pctChangeSup = ((superficie[superficie.length-1] - superficie[0]) / superficie[0]) * 100;
+
+            // Correlación
+            const pearson = calculatePearson(incendios, superficie);
+            const correlationText = Math.abs(pearson) < 0.3 ? 'Baja/Nula' : (pearson > 0 ? 'Directa (+)' : 'Inversa (-)');
+
+            // Generar HTML
             generalStatsEl.innerHTML = '<div class="metrics-grid"></div>';
             const grid = generalStatsEl.querySelector('.metrics-grid');
             
@@ -145,14 +169,25 @@ async function initDashboard() {
                 `<div class="metric-box ${c}"><h4>${t}</h4><span class="metric-value">${v}</span><span class="metric-sub">${s}</span></div>`;
 
             let h = '';
-            h += createMetric('Total Incendios', formatNumber(totalInc), '2021-2024', 'accent-red');
+            // Fila 1: Totales y Promedios
+            h += createMetric('Total Incendios', formatNumber(totalInc), '2014-2024', 'accent-red');
             h += createMetric('Total Superficie', formatNumber(totalSup), 'Hectáreas', 'accent-green');
-            h += createMetric('Promedio Anual', formatNumber(avgInc), 'Incendios', 'accent-orange');
+            h += createMetric('Promedio Incendios', formatNumber(avgInc), 'Anual', 'accent-orange');
             h += createMetric('Promedio Superficie', formatNumber(avgSup), 'Ha por año', 'accent-blue');
-            h += createMetric('Mediana', formatNumber(medianInc), 'Valor central', 'accent-orange');
-            h += createMetric('Pico Máximo', formatNumber(maxInc), `Año ${maxIncYear}`, 'accent-red');
-            h += createMetric('Tendencia', `${pctChange > 0 ? '+' : ''}${pctChange.toFixed(1)}%`, 'Cambio Total', pctChange > 0 ? 'accent-red' : 'accent-green');
-            h += createMetric('Correlación', pearson.toFixed(2), correlationText, 'accent-blue'); // Nueva métrica
+            
+            // Fila 2: Picos Máximos (NUEVO: Superficie agregada)
+            h += createMetric('Pico Incendios', formatNumber(maxInc), `Año ${maxIncYear}`, 'accent-red');
+            h += createMetric('Pico Superficie', formatNumber(maxSup), `Año ${maxSupYear}`, 'accent-green'); // ¡Nueva!
+            
+            // Fila 3: Estadísticos de Dispersión
+            h += createMetric('Desv. Estándar', formatNumber(statsInc.stdDev), 'Dispersión Incendios', 'accent-orange'); // ¡Nueva!
+            h += createMetric('Mediana', formatNumber(medianInc), 'Incendios (Central)', 'accent-orange');
+            
+            // Fila 4: Tendencias y Correlación
+            h += createMetric('Tendencia Incendios', `${pctChangeInc > 0 ? '+' : ''}${pctChangeInc.toFixed(1)}%`, 'Cambio 10 años', pctChangeInc > 0 ? 'accent-red' : 'accent-green');
+            h += createMetric('Tendencia Superficie', `${pctChangeSup > 0 ? '+' : ''}${pctChangeSup.toFixed(1)}%`, 'Cambio 10 años', 'accent-red'); // ¡Nueva!
+            h += createMetric('Coef. Pearson', pearson.toFixed(2), correlationText, 'accent-blue');
+            h += createMetric('Varianza', formatNumber(statsInc.variance), 'Incendios²', 'accent-orange'); // ¡Nueva!
             
             grid.innerHTML = h;
         }
