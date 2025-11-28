@@ -352,18 +352,28 @@ if(inputISC && inputTemp && inputHum && inputWind && inputDays) {
 
         // Umbrales visuales para feedback al usuario
         // El reporte dice corte en 0.5 (50%), aquí damos feedback graduado
+        // Referencia al nuevo elemento
+        const resultMessage = document.getElementById('resultMessage');
+
+        // Lógica de semáforo
         if(prob < 0.30) {
             resultProb.style.color = '#2ecc71'; 
-            resultText.textContent = "Riesgo Bajo"; 
+            resultText.textContent = "VERDE: Riesgo Bajo"; 
             resultText.style.backgroundColor = '#2ecc71';
+            // Mensaje del Doc
+            resultMessage.textContent = "Condiciones seguras. Monitoreo pasivo. Se permiten actividades bajo supervisión.";
         } else if (prob < 0.70) {
             resultProb.style.color = '#f1c40f'; 
-            resultText.textContent = "Riesgo Medio"; 
+            resultText.textContent = "AMARILLO: Precaución"; 
             resultText.style.backgroundColor = '#f1c40f';
+            // Mensaje del Doc
+            resultMessage.textContent = "Suspensión voluntaria de quemas agrícolas. Vigilancia activa en horas de calor.";
         } else {
             resultProb.style.color = '#c0392b'; 
-            resultText.textContent = "¡PELIGRO ALTO!"; 
+            resultText.textContent = "ROJO: ¡ALERTA!"; 
             resultText.style.backgroundColor = '#c0392b';
+            // Mensaje del Doc
+            resultMessage.textContent = "¡PELIGRO EXPLOSIVO! Prohibición total de fuego. Aviso a Protección Civil.";
         }
     }
 
