@@ -6,355 +6,200 @@
   <title>Costos y Sostenibilidad</title>
   <link rel="stylesheet" href="styles.css"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
-  <!-- Chart.js para gráficas modernas -->
+  
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-  <!-- Chart.js datalabels para etiquetas en gráficos -->
   <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
-  <style>
-    /* Ajustes suaves para presentación si no existen en styles.css */
-    .section { max-width: 1100px; margin: 2rem auto; padding: 0 1rem; }
-    .card { background: #fff; border-radius: 14px; padding: 1.2rem; margin-bottom: 1.2rem; box-shadow: 0 6px 18px rgba(0,0,0,.06); }
-    .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; }
-    .info-box { background: #f7f9fc; border-radius: 12px; padding: 1rem; }
-    .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; }
-    .kpi { background: #0f172a; color: #fff; border-radius: 12px; padding: 1rem; }
-    .kpi h3 { margin: 0 0 .25rem 0; font-size: 0.95rem; font-weight: 600; opacity: .85; }
-    .kpi p { margin: 0; font-size: 1.4rem; font-weight: 700; }
-    table { width: 100%; border-collapse: collapse; margin-top: .5rem; }
-    th, td { padding: .65rem .75rem; border-bottom: 1px solid #e9eef5; text-align: left; }
-    th { background: #f0f4fa; font-weight: 600; }
-    .chart-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.2rem; align-items: start; }
-    .chart-card { background: #fff; border-radius: 14px; padding: 1rem; box-shadow: 0 6px 18px rgba(0,0,0,.06); }
-    .muted { color: #5b6474; font-size: .95rem; }
-    .badge { display: inline-block; background: #e6f4ff; color: #075985; border: 1px solid #bae6fd; padding: .25rem .5rem; border-radius: 999px; font-size: .85rem; font-weight: 600; }
-  </style>
 </head>
 <body>
 
   <header class="animated-header">
     <div class="header-side"><img class="header-logo" src="logouni.jpg" alt="Logo"></div>
     <div class="header-center">
-      <h1 class="header-title">Viabilidad del proyecto</h1>
-      <p class="header-sub">Análisis de costos y sostenibilidad (ODS)</p>
+      <h1 class="header-title">Viabilidad del Proyecto</h1>
+      <p class="header-sub">Análisis de Costos y Sostenibilidad (ODS)</p>
     </div>
     <div class="header-side"><img class="header-logo" src="logouni.jpg" alt="Logo"></div>
   </header>
 
   <nav class="main-nav">
     <a href="index.html" class="nav-link">Inicio & Datos</a>
-    <a href="modelo.html" class="nav-link">Modelo predictivo</a>
-    <a href="costos.html" class="nav-link active">Costos y sostenibilidad</a>
+    <a href="modelo.html" class="nav-link">Modelo Predictivo</a>
+    <a href="costos.html" class="nav-link active">Costos y Sostenibilidad</a>
   </nav>
 
   <div class="section">
 
-    <!-- Estructura de costos -->
     <div class="card">
-      <h2><i class="fa-solid fa-coins"></i> Estructura de costos del prototipo</h2>
+      <h2><i class="fa-solid fa-coins"></i> Estructura de Costos del Prototipo</h2>
       <p class="muted">
-        Se asume una tarifa de <span class="badge">250 MXN/h</span> y un total de <span class="badge">380 horas</span>, con inversión inicial de <span class="badge">100,000 MXN</span>.
+        Estimación basada en una tarifa de <span class="badge">250 MXN/h</span> y un total de <span class="badge">380 horas</span>, con una inversión inicial total de <span class="badge">$100,000 MXN</span>.
       </p>
 
       <div class="kpi-grid">
         <div class="kpi">
-          <h3>Costo total</h3>
-          <p>$100,000 MXN</p>
+          <h3><i class="fa-solid fa-money-bill-wave"></i> Costo Total</h3>
+          <p>$100,000</p>
         </div>
         <div class="kpi">
-          <h3>Horas totales</h3>
+          <h3><i class="fa-regular fa-clock"></i> Horas Totales</h3>
           <p>380 h</p>
         </div>
         <div class="kpi">
-          <h3>Tarifa</h3>
-          <p>$250 MXN/h</p>
+          <h3><i class="fa-solid fa-user-tag"></i> Tarifa Hora</h3>
+          <p>$250 MXN</p>
         </div>
         <div class="kpi">
-          <h3>Partidas</h3>
-          <p>6</p>
+          <h3><i class="fa-solid fa-list-check"></i> Partidas</h3>
+          <p>6 Fases</p>
         </div>
       </div>
 
-      <table>
-        <thead>
-          <tr>
-            <th>Partida</th>
-            <th>Horas estimadas</th>
-            <th>Tarifa (MXN/h)</th>
-            <th>Costo (MXN)</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Investigación y planificación</td>
-            <td>80</td>
-            <td>250</td>
-            <td>20,000</td>
-          </tr>
-          <tr>
-            <td>Desarrollo del modelo logístico</td>
-            <td>120</td>
-            <td>250</td>
-            <td>30,000</td>
-          </tr>
-          <tr>
-            <td>Construcción del dataset y normalización</td>
-            <td>60</td>
-            <td>250</td>
-            <td>15,000</td>
-          </tr>
-          <tr>
-            <td>Implementación de la herramienta digital</td>
-            <td>80</td>
-            <td>250</td>
-            <td>20,000</td>
-          </tr>
-          <tr>
-            <td>Integración de Telegram y pruebas</td>
-            <td>40</td>
-            <td>250</td>
-            <td>10,000</td>
-          </tr>
-          <tr>
-            <td>Gastos generales y documentación</td>
-            <td>–</td>
-            <td>–</td>
-            <td>5,000</td>
-          </tr>
-          <tr>
-            <td><strong>Total</strong></td>
-            <td><strong>380</strong></td>
-            <td>–</td>
-            <td><strong>100,000</strong></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <!-- Impacto ODS -->
-    <div class="card">
-      <h2><i class="fa-solid fa-leaf"></i> Impacto en sostenibilidad</h2>
-      <div class="info-grid">
-        <div class="info-box">
-          <h3>ODS 13: Acción por el clima</h3>
-          <p>Los bosques regulan el clima y capturan carbono. Su protección es vital para mitigar el cambio climático.</p>
-        </div>
-        <div class="info-box">
-          <h3>ODS 15: Vida de ecosistemas terrestres</h3>
-          <p>Preservación de la biodiversidad y prevención de la desertificación causada por incendios.</p>
-        </div>
+      <div style="overflow-x: auto;">
+        <table class="financial-table">
+            <thead>
+            <tr>
+                <th>Partida / Fase</th>
+                <th>Horas Estimadas</th>
+                <th>Tarifa (MXN/h)</th>
+                <th>Costo (MXN)</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>Investigación y planificación</td>
+                <td>80</td>
+                <td>250</td>
+                <td>$20,000</td>
+            </tr>
+            <tr>
+                <td>Desarrollo del modelo logístico</td>
+                <td>120</td>
+                <td>250</td>
+                <td>$30,000</td>
+            </tr>
+            <tr>
+                <td>Construcción del dataset y normalización</td>
+                <td>60</td>
+                <td>250</td>
+                <td>$15,000</td>
+            </tr>
+            <tr>
+                <td>Implementación de la herramienta digital</td>
+                <td>80</td>
+                <td>250</td>
+                <td>$20,000</td>
+            </tr>
+            <tr>
+                <td>Integración de Telegram y pruebas</td>
+                <td>40</td>
+                <td>250</td>
+                <td>$10,000</td>
+            </tr>
+            <tr>
+                <td>Gastos generales y documentación</td>
+                <td>–</td>
+                <td>–</td>
+                <td>$5,000</td>
+            </tr>
+            <tr style="background-color: #fff0f0; font-weight: bold; color: #B22222;">
+                <td>TOTAL</td>
+                <td>380</td>
+                <td>–</td>
+                <td>$100,000</td>
+            </tr>
+            </tbody>
+        </table>
       </div>
     </div>
 
-    <!-- ROI -->
     <div class="card">
-      <h2><i class="fa-solid fa-chart-line"></i> Retorno de inversión (ROI) – Valle de Bravo</h2>
+      <h2><i class="fa-solid fa-chart-line"></i> Retorno de Inversión (ROI) – Caso Valle de Bravo</h2>
       <p class="muted">
-        Supuestos: 100 incendios/año, costo promedio por incendio de 333,000 MXN, reducción del 20% con el prototipo.
+        Escenario conservador: 100 incendios/año, costo promedio por combate de $333,000 MXN. Meta: Reducción del 20% con el prototipo.
       </p>
+      
       <div class="kpi-grid">
         <div class="kpi">
-          <h3>Incendios estimados</h3>
-          <p>100 / año</p>
+          <h3>Incendios Anuales</h3>
+          <p>100</p>
         </div>
         <div class="kpi">
-          <h3>Costo promedio</h3>
-          <p>$333,000 MXN</p>
+          <h3>Costo Promedio</h3>
+          <p>$333k</p>
         </div>
-        <div class="kpi">
-          <h3>Reducción esperada</h3>
-          <p>20 incendios</p>
+        <div class="kpi" style="border-left-color: #2ecc71;">
+          <h3>Ahorro Potencial</h3>
+          <p>$6.66 MDP</p>
         </div>
-        <div class="kpi">
-          <h3>Beneficio anual</h3>
-          <p>$6.66 M MXN</p>
+        <div class="kpi" style="border-left-color: #2ecc71;">
+          <h3>ROI Calculado</h3>
+          <p>6,556%</p>
         </div>
       </div>
 
-      <table>
-        <thead>
-          <tr>
-            <th>Concepto</th>
-            <th>Valor</th>
-            <th>Fuente/nota</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Incendios anuales (estimado)</td>
-            <td>100</td>
-            <td>Supuesto conservador</td>
-          </tr>
-          <tr>
-            <td>Costo promedio por incendio</td>
-            <td>333,000 MXN</td>
-            <td>Presupuesto 2023 y número de incendios 2023</td>
-          </tr>
-          <tr>
-            <td>Reducción esperada</td>
-            <td>20 incendios</td>
-            <td>20% de 100</td>
-          </tr>
-          <tr>
-            <td>Beneficio anual</td>
-            <td>6.66 M MXN</td>
-            <td>20 × 333,000</td>
-          </tr>
-          <tr>
-            <td>Inversión inicial</td>
-            <td>100,000 MXN</td>
-            <td>Costos del prototipo</td>
-          </tr>
-          <tr>
-            <td>ROI</td>
-            <td>6,556%</td>
-            <td>(6.66M − 0.10M) / 0.10M</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <!-- Gráficas modernas -->
-    <div class="card">
-      <h2><i class="fa-solid fa-chart-pie"></i> Visualizaciones</h2>
-      <div class="chart-grid">
-        <div class="chart-card">
-          <h3>Distribución de costos</h3>
-          <canvas id="costPie"></canvas>
-          <p class="muted">La mayor proporción se destina al desarrollo del modelo y a la implementación de la herramienta.</p>
-        </div>
-        <div class="chart-card">
-          <h3>Presupuesto CONAFOR (2018–2024)</h3>
-          <canvas id="budgetBar"></canvas>
-          <p class="muted">Serie con puntos reportados: 2018, 2023 y 2024. Valores intermedios mostrados como pendientes.</p>
-        </div>
+      <div style="overflow-x: auto;">
+        <table class="financial-table">
+            <thead>
+            <tr>
+                <th>Concepto</th>
+                <th>Valor</th>
+                <th>Fuente / Nota</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>Incendios anuales (estimado)</td>
+                <td>100</td>
+                <td>Supuesto conservador (Valle de Bravo)</td>
+            </tr>
+            <tr>
+                <td>Costo promedio por incendio</td>
+                <td>$333,000 MXN</td>
+                <td>Presupuesto CONAFOR 2023 / N° Incendios</td>
+            </tr>
+            <tr>
+                <td>Reducción esperada</td>
+                <td>20 incendios</td>
+                <td>20% de efectividad del prototipo</td>
+            </tr>
+            <tr style="font-weight: bold;">
+                <td>Beneficio anual (Ahorro)</td>
+                <td>$6.66 Millones</td>
+                <td>20 × $333,000</td>
+            </tr>
+            <tr>
+                <td>Inversión inicial</td>
+                <td>$100,000 MXN</td>
+                <td>Costos de desarrollo (Tabla 1)</td>
+            </tr>
+            </tbody>
+        </table>
       </div>
     </div>
 
-    <!-- Fuentes y supuestos -->
     <div class="card">
-      <h2><i class="fa-solid fa-file-lines"></i> Fuentes y supuestos</h2>
-      <ul>
-        <li><strong>Presupuesto CONAFOR:</strong> 4,391 M MXN (2018) y 903 M MXN (2024). 2,533 M MXN en 2023.</li>
-        <li><strong>Incendios 2023:</strong> 7,611 casos y ~1,047,000 hectáreas afectadas.</li>
-        <li><strong>Costo promedio por incendio:</strong> ~333,000 MXN (2,533 M / 7,611).</li>
-        <li><strong>Suposición Valle de Bravo:</strong> 100 incendios/año; reducción esperada del 20% con el prototipo.</li>
-      </ul>
+      <h2><i class="fa-solid fa-chart-pie"></i> Visualización de Datos Financieros</h2>
+      <div class="chart-grid-costos">
+        <div>
+          <h3 style="font-size: 1rem; text-align: center;">Distribución de la Inversión</h3>
+          <div class="chart-card-inner">
+            <canvas id="costPie"></canvas>
+          </div>
+        </div>
+        <div>
+          <h3 style="font-size: 1rem; text-align: center;">Presupuesto CONAFOR (2018–2024)</h3>
+          <div class="chart-card-inner">
+            <canvas id="budgetBar"></canvas>
+          </div>
+        </div>
+      </div>
+      <p class="muted" style="text-align: center; margin-top: 15px;">
+        <em>Fuente: Análisis propio basado en reportes de Infobae (2024) y Meganoticias (2023).</em>
+      </p>
     </div>
 
   </div>
 
-  <script>
-    // Plugin global de datalabels
-    Chart.register(ChartDataLabels);
-
-    // Paleta moderna
-    const palette = {
-      blue: '#2563eb',
-      sky: '#0ea5e9',
-      indigo: '#4f46e5',
-      emerald: '#10b981',
-      amber: '#f59e0b',
-      rose: '#f43f5e',
-      slate: '#64748b'
-    };
-
-    // Gráfico de pastel: distribución de costos
-    const costPie = new Chart(document.getElementById('costPie'), {
-      type: 'pie',
-      data: {
-        labels: [
-          'Investigación y planificación',
-          'Desarrollo del modelo logístico',
-          'Construcción del dataset y normalización',
-          'Implementación de la herramienta digital',
-          'Integración de Telegram y pruebas',
-          'Gastos generales y documentación'
-        ],
-        datasets: [{
-          data: [20000, 30000, 15000, 20000, 10000, 5000],
-          backgroundColor: [
-            palette.indigo,
-            palette.blue,
-            palette.emerald,
-            palette.sky,
-            palette.amber,
-            palette.rose
-          ],
-          borderColor: '#ffffff',
-          borderWidth: 2
-        }]
-      },
-      options: {
-        responsive: true,
-        plugins: {
-          legend: { position: 'bottom' },
-          tooltip: {
-            callbacks: {
-              label: (ctx) => {
-                const value = ctx.parsed;
-                const total = ctx.dataset.data.reduce((a,b)=>a+b,0);
-                const pct = ((value/total)*100).toFixed(1);
-                return `${ctx.label}: $${value.toLocaleString('es-MX')} (${pct}%)`;
-              }
-            }
-          },
-          datalabels: {
-            color: '#fff',
-            formatter: (value, ctx) => {
-              const total = ctx.chart.data.datasets[0].data.reduce((a,b)=>a+b,0);
-              const pct = (value / total) * 100;
-              return `${pct.toFixed(1)}%`;
-            }
-          }
-        }
-      }
-    });
-
-    // Gráfico de barras: Presupuesto CONAFOR (2018–2024)
-    // Datos conocidos: 2018=4391, 2023=2533, 2024=903 (millones MXN)
-    // Valores intermedios se dejan como null para marcar discontinuidad sin inventar cifras.
-    const budgetBar = new Chart(document.getElementById('budgetBar'), {
-      type: 'bar',
-      data: {
-        labels: ['2018', '2019', '2020', '2021', '2022', '2023', '2024'],
-        datasets: [{
-          label: 'Millones de MXN',
-          data: [4391, null, null, null, null, 2533, 903],
-          backgroundColor: palette.slate,
-          borderRadius: 8,
-          barPercentage: 0.6,
-          categoryPercentage: 0.7
-        }]
-      },
-      options: {
-        responsive: true,
-        scales: {
-          y: {
-            title: { display: true, text: 'Presupuesto (millones de pesos)' },
-            beginAtZero: true
-          }
-        },
-        plugins: {
-          legend: { display: false },
-          tooltip: {
-            callbacks: {
-              label: (ctx) => {
-                const v = ctx.raw;
-                return v === null ? 'Dato no reportado' : `Presupuesto: ${v.toLocaleString('es-MX')} M MXN`;
-              }
-            }
-          },
-          datalabels: {
-            color: '#111827',
-            anchor: 'end',
-            align: 'top',
-            formatter: (value) => value === null ? '' : `${value.toLocaleString('es-MX')}`
-          }
-        }
-      }
-    });
-  </script>
-
-  <script src="script.js"></script>
+  <script src="script.js"></script> 
 </body>
 </html>
