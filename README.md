@@ -1,49 +1,55 @@
-# Plataforma Web: Proyecto Prototípico de Incendios Forestales
+# Sistema Prototípico de Alerta Temprana para Incendios Forestales
 
-Este proyecto es una solución integral web desarrollada para la **Universidad Nacional Rosario Castellanos** (Grupo 203). Su objetivo es concientizar sobre los incendios forestales en el Estado de México, presentar datos históricos (2021-2024) y ofrecer herramientas de predicción matemática, todo alineado con los ODS de la Agenda 2030.
+**Universidad Nacional Rosario Castellanos | Licenciatura en Ciencia de Datos para Negocios | Grupo 203**
+
+Este repositorio aloja la solución integral web desarrollada para la asignatura de *Problema Prototípico*. Es una herramienta de "Tecnología Frugal" diseñada para operar sin conexión a internet, permitiendo a las comunidades de Valle de Bravo estimar el riesgo de incendios forestales mediante modelos matemáticos.
 
 ## 📋 Descripción General
 
-La plataforma ha evolucionado de un dashboard estático a un sitio web informativo, analítico e interactivo con tres módulos principales:
+La plataforma integra análisis de datos históricos, modelado predictivo y responsabilidad social en una interfaz web ligera y accesible. El proyecto responde a la problemática de la **brecha digital** y la **falta de prevención** en zonas vulnerables.
 
-1.  **Inicio y Contexto:** Dashboard con visualización de datos históricos, KPIs animados e información educativa basada en folletos de divulgación.
-2.  **Modelo Predictivo:**
-    * Integración del Sistema Nacional de Predicción (CONAFOR/UJED).
-    * **Simulador de Riesgo Local:** Una herramienta interactiva desarrollada por el equipo que aplica **Regresión Logística** para calcular la probabilidad de incendio en Valle de Bravo en tiempo real.
-3.  **Costos y Sostenibilidad:** Análisis financiero detallado, retorno de inversión (ROI) del prototipo y su impacto en los Objetivos de Desarrollo Sostenible.
+### Módulos Principales:
 
-## 🚀 Características Principales
+1.  **Inicio y Contexto (Dashboard):** Visualización de datos históricos (2014-2024) con análisis de tendencias, correlación de Pearson y gráficos de aceleración del daño ambiental.
+2.  **Modelo Predictivo (Simulador):**
+    * Implementación manual de **Regresión Logística Multivariante**.
+    * **Semáforo de Riesgo:** Protocolo de actuación automático (Verde/Amarillo/Rojo) con mensajes de prevención específicos.
+    * Normalización de variables ajustada a máximos históricos locales.
+3.  **Costos y Sostenibilidad:** Análisis financiero (ROI > 6,000%), estructura de costos de desarrollo y alineación con los ODS 13 y 15 de la Agenda 2030.
 
-* **Simulador Matemático Interactivo:** Implementación de la función Sigmoide para el cálculo de probabilidades basado en variables meteorológicas (Temperatura y Humedad), sin uso de librerías externas de IA.
-* **Arquitectura Modular:** Separación clara de responsabilidades (HTML Estructural, CSS Unificado, JS Centralizado).
-* **Visualización de Datos Avanzada:** 8 tipos de gráficos interactivos (Chart.js) incluyendo proyecciones presupuestales y tendencias históricas.
-* **Identidad Institucional:** Diseño UI consistente con la paleta de colores oficial de la UNRC (Guinda #9F2241) y animaciones CSS fluidas.
-* **Experiencia de Usuario (UX):** Navegación intuitiva, acordeones exclusivos para manejo de información y contadores dinámicos.
+## 🎓 Integración Multidisciplinaria
 
-## 🛠️ Tecnologías Utilizadas
+Este proyecto acredita competencias de las siguientes 6 asignaturas:
 
-* **HTML5:** Estructura semántica y accesibilidad.
-* **CSS3:** Diseño responsivo, Grid/Flexbox y animaciones personalizadas.
-* **JavaScript (ES6):**
-    * Lógica de negocio y manipulación del DOM.
-    * Implementación de algoritmos matemáticos (Cálculo/Álgebra).
-    * Manejo de eventos y observadores de intersección.
-* **Chart.js:** Librería para renderizado de gráficos dinámicos.
+* **Cálculo Diferencial:** Aplicación de derivadas parciales en el algoritmo de *Descenso de Gradiente* (ver script de entrenamiento en Python).
+* **Álgebra Lineal:** Operaciones vectoriales y producto punto para el cálculo de la variable latente $z$ y normalización de espacios vectoriales.
+* **Estadística:** Implementación de métricas de dispersión (Desviación Estándar) y Correlación de Pearson en el Dashboard.
+* **Programación para la Ciencia de Datos:** Desarrollo de algoritmos *from-scratch* (sin librerías de caja negra) en JavaScript y Python.
+* **Redacción y Compilación de Textos:** Documentación técnica estructurada, justificación teórica y narrativa de datos.
+* **Desarrollo Sostenible y Responsabilidad Social:** Enfoque ético del algoritmo, priorizando la seguridad comunitaria y la accesibilidad tecnológica.
 
-## 👥 Equipo de Desarrollo (Grupo 203)
+## 🚀 Características Técnicas
+
+* **Arquitectura:** Client-Side pura (HTML5 + CSS3 + JS Vanilla). Funciona 100% Offline.
+* **Motor Matemático:** Función Sigmoide $\sigma(z) = \frac{1}{1 + e^{-z}}$.
+* **Visualización:** Chart.js para gráficos interactivos y KPIs animados.
+* **Entrenamiento:** Los coeficientes $\beta$ fueron obtenidos mediante un script de Python (incluido en Anexos) usando un dataset sintético validado.
+
+## 👥 Equipo de Desarrollo
 
 * Manuel Palma Garay
 * David Ramsés Lugo Hernández
 * Leslie Paola Alvarado Cruz
 * Damián Sánchez Morales
 
-## 📂 Estructura del Proyecto
+## 📂 Estructura del Repositorio
 
 ```text
 proyecto-prototipico/
-├── index.html      # [INICIO] Dashboard de datos, KPIs animados y contexto educativo
-├── modelo.html     # [MODELO] Simulador de Regresión Logística y visualización externa
-├── costos.html     # [COSTOS] Análisis financiero, gráficas de presupuesto y ROI
-├── styles.css      # Hoja de estilos unificada (Diseño Institucional + Componentes)
-├── script.js       # Lógica centralizada (Gráficos, Simulador, Interacciones)
-└── README.md       # Documentación técnica del proyecto
+├── index.html      # Dashboard con análisis estadístico
+├── modelo.html     # Simulador de riesgo con Semáforo y Protocolos
+├── costos.html     # Análisis financiero y ROI
+├── styles.css      # Estilos institucionales (UNRC)
+├── script.js       # Lógica del modelo logístico y gráficos
+├── train_model.py  # Script de entrenamiento (Descenso de Gradiente)
+└── README.md       # Documentación técnica
